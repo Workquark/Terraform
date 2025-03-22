@@ -1,6 +1,6 @@
-# output "cluster_endpoint" {
-#   value = module.gke_dev.cluster_endpoint
-# }
+output "cluster_endpoint" {
+  value = module.gke_dev.cluster_endpoint
+}
 
 
 # output "dev_master_ipv4_cidr_block" {

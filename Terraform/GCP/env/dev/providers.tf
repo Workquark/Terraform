@@ -35,6 +35,16 @@ terraform {
       version = "~> 3.0"
     }
 
+    kubernetes = {
+      source  = "hashicorp/kubernetes"
+      version = ">= 2.36.0"
+    }
+
+    helm = {
+      source  = "hashicorp/helm"
+      version = "3.0.0-pre2"
+    }
+
     null = {
       source  = "hashicorp/null"
       version = "~> 3.2.0"
@@ -45,3 +55,21 @@ terraform {
     prefix = "Terraform/dev/terraform.state"
   }
 }
+
+data "google_client_config" "default" {
+  depends_on = [module.gke_dev]
+}
+
+# provider "kubernetes" {
+#   host                   = module.gke_dev.cluster_endpoint
+#   token                  = data.google_client_config.default.access_token
+#   cluster_ca_certificate = module.gke_dev.cluster_ca_certificate
+# }
+
+# provider "helm" {
+#   kubernetes {
+#     host                   = module.gke_dev.cluster_endpoint
+#     token                  = data.google_client_config.default.access_token
+#     cluster_ca_certificate = module.gke_dev.cluster_ca_certificate
+#   }
+# }

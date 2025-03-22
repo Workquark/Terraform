@@ -37,7 +37,7 @@ module "base" {
   #######################
 
   cloud_domains = {
-    # "dev.aviatize.com." = []
+    "druidsoft.in." = []
   }
 
   #####################
