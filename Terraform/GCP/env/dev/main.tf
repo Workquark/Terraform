@@ -126,106 +126,6 @@ module "base" {
   # }
 }
 
-
-#########################################
-##             GKE DEV                 ##
-#########################################
-module "gke_dev" {
-  source       = "../../modules/gke"
-  cluster_name = "${local.name}-${local.environment}-gke-cluster"
-
-  project_id = data.google_project.this.project_id
-  region     = data.google_client_config.this.region
-
-  # zones = ["europe-west1-b", "europe-west1-c"]
-
-  kubernetes_version = "1.30.9"
-  release_channel    = "REGULAR"
-
-  name                     = local.name
-  environment              = local.environment
-  gke_service_account_name = "${local.name}-${local.environment}-gke"
-
-  gke_private_endpoint_subnetwork          = "gke-${local.environment}-private-endpoint-subnet-1"
-  gke_cluster_subnetwork                   = "gke-${local.environment}-cluster-subnet-1"
-  gke_cluster_ip_range_pods_subnetwork     = "gke-${local.environment}-cluster-pod-subnet-1"
-  gke_cluster_ip_range_services_subnetwork = "gke-${local.environment}-cluster-service-subnet-1"
-
-  network_name = "${local.name}-${local.environment}-vpc-network"
-
-  master_ipv4_cidr_block = "10.127.0.16/28"
-  master_authorized_networks = [
-    {
-      display_name : "twingate_network",
-      cidr_block : "10.30.21.240/28"
-    },
-    {
-      cidr_block   = "10.80.0.0/16"
-      display_name = "aviatize_network"
-    },
-    {
-      cidr_block   = "10.81.0.0/16"
-      display_name = "argocd"
-    }
-  ]
-
-  node_pools = [
-    {
-      name         = "dev-pool"
-      machine_type = "e2-standard-2"
-
-      min_count          = 1
-      max_count          = 100
-      initial_node_count = 1
-
-      local_ssd_count = 0
-
-      spot         = true
-      disk_size_gb = 100
-      disk_type    = "pd-standard"
-      image_type   = "UBUNTU_CONTAINERD" # "COS_CONTAINERD"
-      enable_gcfs  = false
-      enable_gvnic = false
-      auto_repair  = true
-      auto_upgrade = true
-      # service_account    = "project-service-account@<PROJECT ID>.iam.gserviceaccount.com"
-      preemptible = false
-
-      # node_config = {
-      #   dynamic "workload_metadata_config" {
-      #     node_metadata = "GKE_METADATA_SERVER"
-      #   }
-      # }
-    }
-  ]
-
-  gke_node_pool_default_labels = {
-    "environment" : local.environment
-    "project" : local.name
-    "ownership" : local.ownership
-    "managed_by" : local.managed_by
-    "disk_type" : "ubuntu_containerd"
-  }
-
-  depends_on = [
-    module.base
-  ]
-}
-
-############################################
-##                GKE IAM                 ##
-############################################
-
-# module "iam" {
-#   source         = "./iam"
-#   project_id     = data.google_project.this.project_id
-#   project_number = data.google_project.this.number
-
-#   # dns_admin_service_account_emails       = module.base.dns_admin_service_account_emails
-#   # secrets_manager_service_account_emails = module.base.secrets_manager_service_account_emails
-#   # depends_on                             = [module.gke_sandbox]
-# }
-
 ############################################
 ##                TWINGATE                ##
 ############################################
@@ -233,10 +133,10 @@ module "gke_dev" {
 module "twingate" {
   source = "../../modules/twingate"
 
-  name = local.name
-
-  network_name = "${local.name}-${local.environment}-vpc-network"
-  environment  = local.environment
+  name                  = local.name
+  twingate_network_name = ""
+  remote_network_name   = "${local.name}-${local.environment}-vpc-network"
+  environment           = local.environment
 
   zone_names = data.google_compute_zones.available.names
   # twingate_remote_network_id = data.twingate_remote_network.network.id
@@ -257,10 +157,114 @@ module "twingate" {
 
   master_ipv4_cidr_block           = local.master_ipv4_cidr_block
   private_endpoint_subnetwork_cidr = local.private_endpoint_subnetwork_cidr
+
   depends_on = [
     module.base
   ]
 }
+
+
+
+# #########################################
+# ##             GKE DEV                 ##
+# #########################################
+# module "gke_dev" {
+#   source       = "../../modules/gke"
+#   cluster_name = "${local.name}-${local.environment}-gke-cluster"
+
+#   project_id = data.google_project.this.project_id
+#   region     = data.google_client_config.this.region
+
+#   # zones = ["europe-west1-b", "europe-west1-c"]
+
+#   kubernetes_version = "1.30.9"
+#   release_channel    = "REGULAR"
+
+#   name                     = local.name
+#   environment              = local.environment
+#   gke_service_account_name = "${local.name}-${local.environment}-gke"
+
+#   gke_private_endpoint_subnetwork          = "gke-${local.environment}-private-endpoint-subnet-1"
+#   gke_cluster_subnetwork                   = "gke-${local.environment}-cluster-subnet-1"
+#   gke_cluster_ip_range_pods_subnetwork     = "gke-${local.environment}-cluster-pod-subnet-1"
+#   gke_cluster_ip_range_services_subnetwork = "gke-${local.environment}-cluster-service-subnet-1"
+
+#   network_name = "${local.name}-${local.environment}-vpc-network"
+
+#   master_ipv4_cidr_block = "10.127.0.16/28"
+#   master_authorized_networks = [
+#     {
+#       display_name : "twingate_network",
+#       cidr_block : "10.30.21.240/28"
+#     },
+#     {
+#       cidr_block   = "10.80.0.0/16"
+#       display_name = "aviatize_network"
+#     },
+#     {
+#       cidr_block   = "10.81.0.0/16"
+#       display_name = "argocd"
+#     }
+#   ]
+
+#   node_pools = [
+#     {
+#       name         = "dev-pool"
+#       machine_type = "e2-standard-2"
+
+#       min_count          = 1
+#       max_count          = 100
+#       initial_node_count = 1
+
+#       local_ssd_count = 0
+
+#       spot         = true
+#       disk_size_gb = 100
+#       disk_type    = "pd-standard"
+#       image_type   = "UBUNTU_CONTAINERD" # "COS_CONTAINERD"
+#       enable_gcfs  = false
+#       enable_gvnic = false
+#       auto_repair  = true
+#       auto_upgrade = true
+#       # service_account    = "project-service-account@<PROJECT ID>.iam.gserviceaccount.com"
+#       preemptible = false
+
+#       # node_config = {
+#       #   dynamic "workload_metadata_config" {
+#       #     node_metadata = "GKE_METADATA_SERVER"
+#       #   }
+#       # }
+#     }
+#   ]
+
+#   gke_node_pool_default_labels = {
+#     "environment" : local.environment
+#     "project" : local.name
+#     "ownership" : local.ownership
+#     "managed_by" : local.managed_by
+#     "disk_type" : "ubuntu_containerd"
+#   }
+
+#   depends_on = [
+#     module.base
+#   ]
+# }
+
+############################################
+##                GKE IAM                 ##
+############################################
+
+# module "iam" {
+#   source         = "./iam"
+#   project_id     = data.google_project.this.project_id
+#   project_number = data.google_project.this.number
+
+#   # dns_admin_service_account_emails       = module.base.dns_admin_service_account_emails
+#   # secrets_manager_service_account_emails = module.base.secrets_manager_service_account_emails
+#   # depends_on                             = [module.gke_sandbox]
+# }
+
+
 
 ####################################################################
 ##                GCP NETWORK CONNECTIVITY CENTER                 ##

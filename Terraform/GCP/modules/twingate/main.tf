@@ -1,33 +1,33 @@
-# resource "twingate_remote_network" "network" {
-#   name     = "${var.name}-${var.environment}-vpc-network"
-#   location = "GOOGLE_CLOUD"
-# }
+resource "twingate_remote_network" "network" {
+  name     = var.remote_network_name
+  location = "GOOGLE_CLOUD"
+}
 
 # ############################################
 # ##        CREATE TWINGATE CONNECTOR       ##
 # ############################################
 
-# resource "twingate_connector" "connector" {
-#   count             = var.twingate_instances_count
-#   name              = "twingate-${var.environment}-${count.index}"
-#   remote_network_id = twingate_remote_network.network.id
-# }
+resource "twingate_connector" "connector" {
+  count             = var.twingate_instances_count
+  name              = "twingate-${var.environment}-${count.index}"
+  remote_network_id = twingate_remote_network.network.id
+}
 
 # ###########################################
 # ##        TWINGATE CONNECTOR TOKENS      ##
 # ###########################################
 
-# resource "twingate_connector_tokens" "tokens" {
-#   count        = length(twingate_connector.connector)
-#   connector_id = twingate_connector.connector[count.index].id
-# }
+resource "twingate_connector_tokens" "tokens" {
+  count        = length(twingate_connector.connector)
+  connector_id = twingate_connector.connector[count.index].id
+}
 
 #########################################################
 ##        TWINGATE CONNECTOR CONTAINER INSTANCES       ##
 #########################################################
 
 module "container" {
-  # count = var.twingate_instances_count
+  count = var.twingate_instances_count
 
   source  = "terraform-google-modules/container-vm/google"
   version = "~> 3.2"
@@ -42,44 +42,44 @@ module "container" {
     env = [
       {
         name  = "TWINGATE_NETWORK"
-        value = "workquark0403"
+        value = var.twingate_network_name
       },
       {
         name  = "TWINGATE_ACCESS_TOKEN"
-        value = "eyJhbGciOiJFUzI1NiIsImtpZCI6IjBQRDZsb19zR0t6SW8welJ2c2V1R1ZDQ0F5clBQM3hTaE1LdkFKY1RyNkUiLCJ0eXAiOiJEQVQifQ.eyJudCI6IkFOIiwiYWlkIjoiNDcxMjA3IiwiZGlkIjoiMjA2MTQxNyIsImp0aSI6ImYyNDE1OGU3LTRjZGMtNDZjZi1hOTQzLTA4Y2NmOTlkYjUzYyIsImlzcyI6InR3aW5nYXRlIiwiYXVkIjoid29ya3F1YXJrMDQwMyIsImV4cCI6MTc0MTcyMTkwMiwiaWF0IjoxNzQxNzE4MzAyLCJ2ZXIiOiI0IiwidGlkIjoiMTM5MjI3Iiwicm53IjoxNzQxNzE4NjYyLCJybmV0aWQiOiIxODMwOTkifQ.fckOsA3qHz4DM7w4KV0Oa7xvYyAn1slnmBgdrUGkX_YOOxlXMAhqpZ3aaLQjYQvl5UZpXFVc0-af3tgRB3TEBg" #twingate_connector_tokens.tokens[count.index].access_token
+        value = twingate_connector_tokens.tokens[count.index].access_token
       },
       {
         name  = "TWINGATE_REFRESH_TOKEN"
-        value = "rr55OOSgsuNwcP5FXckCMjP0aediEprIhx5rJDh5-7efWv4137wEwkoDLFZP2ljCDCxQuFHEa5GClVIZ0chbiNT36HdGG8mR4lF0FKky1N97G57ffzZvzIzXEchKgSKMpAMlOQ" # twingate_connector_tokens.tokens[count.index].refresh_token
+        value = twingate_connector_tokens.tokens[count.index].refresh_token
       }
     ]
   }
   restart_policy = "Always"
-  # depends_on = [
-  #   twingate_connector.connector,
-  #   twingate_connector_tokens.tokens
-  # ]
+  depends_on = [
+    twingate_connector.connector,
+    twingate_connector_tokens.tokens
+  ]
 }
 
-#######################################################
-##        GOOGLE COMPUTE TWINGATE VM INSTANCES       ##
-#######################################################
+# #######################################################
+# ##        GOOGLE COMPUTE TWINGATE VM INSTANCES       ##
+# #######################################################
 
 
 resource "google_compute_instance" "twingate" {
-  # count = var.twingate_instances_count
+  count = var.twingate_instances_count
 
   project = var.project_id
 
-  name         = "${var.name}-${var.environment}-twingate"
+  name         = "${var.name}-${var.environment}-twingate-${count.index}"
   machine_type = var.twingate_machine_type
 
   zone = var.zone_names[0]
 
   boot_disk {
     initialize_params {
-      # image = module.container[count.index].source_image
-      image = module.container.source_image
+      image = module.container[count.index].source_image
+      # image = module.container.source_image
     }
 
     # kms_key_self_link  = google_kms_crypto_key.disk_encryption_key.id
@@ -103,8 +103,8 @@ resource "google_compute_instance" "twingate" {
   # tags = var.tags # ["container-vm-example"]
 
   metadata = {
-    # gce-container-declaration = module.container[count.index].metadata_value
-    gce-container-declaration = module.container.metadata_value
+    gce-container-declaration = module.container[count.index].metadata_value
+    # gce-container-declaration = module.container.metadata_value
     google-logging-enabled    = "true"
     google-monitoring-enabled = "true"
     block-project-ssh-keys    = true
@@ -131,30 +131,30 @@ resource "google_compute_instance" "twingate" {
 
   deletion_protection = false # var.deletion_protection
 
-  # depends_on = [
-  #   twingate_connector.connector,
-  #   twingate_connector_tokens.tokens
-  #   # google_compute_address.internal_with_subnet_and_address
-  # ]
+  depends_on = [
+    twingate_connector.connector,
+    twingate_connector_tokens.tokens
+    # google_compute_address.internal_with_subnet_and_address
+  ]
 
-  # lifecycle {
-  #   replace_triggered_by = [
-  #     null_resource.version
-  #   ]
-  # }
+  lifecycle {
+    replace_triggered_by = [
+      null_resource.version
+    ]
+  }
 }
 
 #####################################################################
 ##        NULL RESOURCE TO TRIGGER TWINGATE CONTAINER UPDATE       ##
 #####################################################################
 
-# resource "null_resource" "version" {
+resource "null_resource" "version" {
 
-#   # Just to ensure this gets run every time
-#   triggers = {
-#     version = var.twingate_image_version
-#   }
-# }
+  # Just to ensure this gets run every time
+  triggers = {
+    version = var.twingate_image_version
+  }
+}
 
 
 # resource "twingate_resource" "gke_management" {

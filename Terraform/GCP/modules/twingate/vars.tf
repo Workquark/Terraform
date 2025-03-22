@@ -13,9 +13,15 @@ variable "environment" {
   description = "description"
 }
 
-variable "network_name" {
+variable "twingate_network_name" {
   type        = string
-  description = "description"
+  description = "twingate network name"
+}
+
+
+variable "remote_network_name" {
+  type        = string
+  description = "twingate remote network name to connect to"
 }
 
 variable "zone_names" {

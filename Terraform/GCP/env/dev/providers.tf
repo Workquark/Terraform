@@ -15,7 +15,7 @@ provider "google" {
 
 provider "twingate" {
   api_token = var.twingate_api_token
-  network   = "aviatize"
+  network   = "workquark0403"
 }
 
 terraform {

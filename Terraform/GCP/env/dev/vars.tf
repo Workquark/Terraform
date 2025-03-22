@@ -49,6 +49,7 @@ variable "twingate_api_token" {
   default     = "vVY_Y_X0IHjECCprQVywjiw4FvWvYusisNIzTzU9xCBkxacR79SKQaTLKkgQTfc9e0ad5kRXGJgiGDQWDUxF8syN7dCg3K-GOZ4prkoZwgDj1Se2tyRlmyfgKOGYUTleWaxmSg"
 }
 
+
 variable "twingate_admin_group_id" {
   type        = string
   description = "twingate admin group id"
