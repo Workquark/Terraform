@@ -157,40 +157,40 @@ resource "null_resource" "version" {
 }
 
 
-# resource "twingate_resource" "gke_management" {
-#   name              = "${var.name}-${var.environment}-gke"
-#   address           = var.private_endpoint_subnetwork_cidr != "" ? var.private_endpoint_subnetwork_cidr : var.master_ipv4_cidr_block
-#   remote_network_id = twingate_remote_network.network.id # var.twingate_remote_network_id
+resource "twingate_resource" "twingate_resources" {
+  name              = "${var.name}-${var.environment}-gke"
+  address           = var.private_endpoint_subnetwork_cidr != "" ? var.private_endpoint_subnetwork_cidr : var.master_ipv4_cidr_block
+  remote_network_id = twingate_remote_network.network.id # var.twingate_remote_network_id
 
-#   # security_policy_id = data.twingate_security_policy.test_policy.id
+  # security_policy_id = data.twingate_security_policy.test_policy.id
 
-#   protocols = {
-#     allow_icmp = true
-#     tcp = {
-#       policy = "ALLOW_ALL"
-#       # ports = ["80", "82-83"]
-#     }
-#     udp = {
-#       policy = "ALLOW_ALL"
-#     }
-#   }
+  protocols = {
+    allow_icmp = true
+    tcp = {
+      policy = "ALLOW_ALL"
+      # ports = ["80", "82-83"]
+    }
+    udp = {
+      policy = "ALLOW_ALL"
+    }
+  }
 
-#   dynamic "access_group" {
-#     for_each = var.twingate_access_group_ids
-#     content {
-#       group_id = access_group.value
-#       # security_policy_id = data.twingate_security_policy.test_policy.id
-#       # usage_based_autolock_duration_days = 30
-#     }
-#   }
+  dynamic "access_group" {
+    for_each = var.twingate_access_group_ids
+    content {
+      group_id = access_group.value
+      # security_policy_id = data.twingate_security_policy.test_policy.id
+      # usage_based_autolock_duration_days = 30
+    }
+  }
 
-#   # dynamic "access_service" {
-#   #   for_each = [twingate_service_account.github_actions_prod.id]
-#   #   content {
-#   #     service_account_id = access_service.value
-#   #   }
-#   # }
+  # dynamic "access_service" {
+  #   for_each = [twingate_service_account.github_actions_prod.id]
+  #   content {
+  #     service_account_id = access_service.value
+  #   }
+  # }
 
-#   is_active = true
+  is_active = true
 
-# }
+}
