@@ -8,7 +8,7 @@ resources:
   # - ../components/clusters
   - ../components/applications
   - ../components/applicationsets
-  - ../components/argocd-projects
+  - ../components/argoprojects
   
   ## Individual bootstrap
   # - argocd-app.yaml

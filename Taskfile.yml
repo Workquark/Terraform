@@ -1,0 +1,21 @@
+# https://taskfile.dev
+
+version: '3'
+
+vars:
+  GREETING: Hello, World!
+
+tasks:
+  default:
+    cmds:
+      - echo "{{.GREETING}}"
+    silent: true
+
+  install:
+      - helm repo add argo https://argoproj.github.io/argo-helm
+      - helm repo update
+      - helm upgrade -i --wait argocd argo/argo-cd --version 7.8.13 -n argocd --create-namespace -f ./k8s/argocd/gcp/manifests/helmcharts/argocd/argocd.values.yaml
+    
+  configure:
+    cmds:
+      - kustomize build k8s/argocd/gcp/bootstrap | kubectl apply -f -

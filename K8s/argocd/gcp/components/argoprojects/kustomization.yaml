@@ -6,6 +6,6 @@ namespace: argocd
 resources:
   - management.yaml
   # - sandbox.yaml # disabled until further experiments required
-  - dev.yaml
-  - prod-europe-west1.yaml
-  - prod-us-central1.yaml
+  # - dev.yaml
+  # - prod-europe-west1.yaml
+  # - prod-us-central1.yaml
