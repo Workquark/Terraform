@@ -11,6 +11,7 @@ resources:
   - ../components/argoprojects
   
   ## Individual bootstrap
+  - bootstrapper.yaml
   # - argocd-app.yaml
   # - argo-rollouts-app.yaml
   # - argo-events-app.yaml
