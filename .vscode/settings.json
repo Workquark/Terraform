@@ -3,6 +3,7 @@
     "CONTAINERD",
     "druidsoft",
     "preemptible",
+    "subsetting",
     "twingate",
     "velero"
   ]
