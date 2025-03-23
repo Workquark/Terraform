@@ -7,7 +7,7 @@
 ##        CLOUD DNS ZONE          ##
 ####################################
 
-module "aviatize_cloud_dns_zone" {
+module "cloud_dns_zone" {
   # for_each = { for dns in val.cloud_domains: dns.domain => dns }
   for_each = var.cloud_domains
 
@@ -33,7 +33,7 @@ module "aviatize_cloud_dns_zone" {
 }
 
 
-module "aviatize_cloud_private_dns_zone" {
+module "cloud_private_dns_zone" {
   for_each = var.cloud_domains
 
   source  = "terraform-google-modules/cloud-dns/google"

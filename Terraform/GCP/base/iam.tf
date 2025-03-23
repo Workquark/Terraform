@@ -19,6 +19,7 @@ module "dns_zones_iam_binding" {
   }
 
   depends_on = [
+    module.cloud_dns_zone
     # module.secrets_manager_admins,
     # module.dns_admins
   ]

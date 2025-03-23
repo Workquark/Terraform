@@ -3,6 +3,7 @@
     "CONTAINERD",
     "druidsoft",
     "preemptible",
+    "subnetworks",
     "subsetting",
     "twingate",
     "velero"

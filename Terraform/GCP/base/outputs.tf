@@ -11,6 +11,16 @@ output "network_name" {
   value = module.vpc.network_name
 }
 
+output "global_static_ip" {
+  description = "global static ip"
+  value       = google_compute_global_address.global_static_ip.address
+}
+
+output "global_static_ip_name" {
+  description = "global static ip"
+  value       = google_compute_global_address.global_static_ip.name
+}
+
 # output "endpoints" {
 #   value       = module.gke.endpoints
 # }
@@ -30,7 +40,7 @@ output "network_name" {
 
 output "dns_names" {
   description = "description"
-  value       = [for dns in module.aviatize_cloud_dns_zone : dns.name]
+  value       = [for dns in module.cloud_dns_zone : dns.name]
 }
 
 output "dns_admins" {

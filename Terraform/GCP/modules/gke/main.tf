@@ -26,8 +26,8 @@ module "gke" {
   # fleet_project_grant_service_agent = true
   # fleet_project                     = var.project_id
 
-  authenticator_security_group = var.authenticator_security_group == "" ? "gke-security-groups@aviatize.com" : var.authenticator_security_group
-  # authenticator_security_group = "gke-security-groups@aviatize.com"
+  # authenticator_security_group = var.authenticator_security_group == "" ? "gke-security-groups@${var.domain}" : var.authenticator_security_group
+  # authenticator_security_group = "<gke-security-groups-name>@<domain>"
 
   network                     = var.network_name
   private_endpoint_subnetwork = var.gke_private_endpoint_subnetwork
@@ -68,7 +68,7 @@ module "gke" {
 
   master_authorized_networks = var.master_authorized_networks
 
-  network_tags = ["aviatize-${var.environment}"]
+  network_tags = ["${var.name}-${var.environment}"]
 
   # cluster_resource_labels = local.default_labels
   node_metadata = "GKE_METADATA_SERVER"

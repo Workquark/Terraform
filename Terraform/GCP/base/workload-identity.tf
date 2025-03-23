@@ -36,7 +36,7 @@
 #   }
 
 #   depends_on          = [google_iam_workload_identity_pool.this]
-#   attribute_condition = "assertion.repository_owner == 'Aviatize'"
+#   attribute_condition = "assertion.repository_owner == '<github-organization-name>'"
 #   # attribute_condition = "attribute.from.subject == \"serviceAccount:github@${var.project_id}.iam.gserviceaccount.com\""
 # }
 

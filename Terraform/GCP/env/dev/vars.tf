@@ -46,14 +46,12 @@ variable "subnetwork_secondary_ranges" {
 variable "twingate_api_token" {
   type        = string
   description = "twingate api token"
-  default     = "vVY_Y_X0IHjECCprQVywjiw4FvWvYusisNIzTzU9xCBkxacR79SKQaTLKkgQTfc9e0ad5kRXGJgiGDQWDUxF8syN7dCg3K-GOZ4prkoZwgDj1Se2tyRlmyfgKOGYUTleWaxmSg"
 }
 
 
 variable "twingate_admin_group_id" {
   type        = string
   description = "twingate admin group id"
-  default     = "R3JvdXA6MzM3NDAx"
 }
 
 

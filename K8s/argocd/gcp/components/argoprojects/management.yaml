@@ -12,7 +12,6 @@ metadata:
     - resources-finalizer.argocd.argoproj.io
 spec:
   sourceRepos:
-    - https://github.com/aviatize/ArgoCD.git
     - https://prometheus-community.github.io/helm-charts
   destinations:
     - namespace: "*"

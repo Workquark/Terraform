@@ -20,16 +20,23 @@ configs:
     server.insecure: true
 
 server:
+  service:
+    type: NodePort
+    # -- Server service annotations
+    annotations:
+      cloud.google.com/neg: '{"exposed_ports": {"80":{"name": "argocd-service-neg"}}}'
   autoscaling:
     enabled: true
     minReplicas: 2
   ingress:
     enabled: true
-    ingressClassName: nginx
+    # ingressClassName: nginx
     annotations:
       nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
       nginx.ingress.kubernetes.io/backend-protocol: "HTTP"
-    extraTls:
-      - hosts:
-        - argocd.druidsoft.in
-        secretName: argocd-ssl-tls
+      kubernetes.io/ingress.global-static-ip-name: "global-static-ip"
+      # kubernetes.io/ingress.class: "gce"
+    # extraTls:
+    #   - hosts:
+    #     - argocd.druidsoft.in
+    #     secretName: argocd-ssl-tls

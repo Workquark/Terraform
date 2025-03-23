@@ -31,6 +31,24 @@ module "subnets" {
   secondary_ranges = var.subnetwork_secondary_ranges
 }
 
+########################################################
+##        GOOGLE GLOBAL COMPUTE STATIC ADDRESS        ##
+########################################################
+
+resource "google_compute_global_address" "global_static_ip" {
+  name         = "global-static-ip"
+  address_type = "EXTERNAL"
+}
+
+resource "google_compute_address" "nat_ip" {
+  name   = "${var.region}-nat-ip"
+  region = var.region # Specify the region for the IP address
+
+  # Optional: You can set the address type if you want an ephemeral or static IP
+  address_type = "EXTERNAL" # Can be EXTERNAL or INTERNAL
+}
+
+
 ################################################################
 ##        GOOGLE CLOUD ROUTER FOR OUTBOUND CONNECTIVITY       ##
 ################################################################
@@ -50,6 +68,9 @@ module "cloud_router" {
   nats = [{
     name                               = "${module.vpc.network_name}-nat-gateway"
     source_subnetwork_ip_ranges_to_nat = "ALL_SUBNETWORKS_ALL_IP_RANGES"
+    nat_ip_allocate_option             = "MANUAL_ONLY"
+    nat_ips                            = [google_compute_address.nat_ip.self_link]
+
     # source_subnetwork_ip_ranges_to_nat = "LIST_OF_SUBNETWORKS"
 
     # subnetworks = [
@@ -70,6 +91,9 @@ module "cloud_router" {
   project = data.google_project.this.project_id
   network = module.vpc.network_name
 }
+
+
+
 
 ##############################################
 ##        GOOGLE CLOUD FIREWALL RULES       ##

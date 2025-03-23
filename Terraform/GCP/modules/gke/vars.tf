@@ -3,6 +3,12 @@
 ## GKE VARIABLES #
 ##################
 
+variable "domain" {
+  type        = string
+  description = "domain name"
+}
+
+
 variable "project_id" {
   type        = string
   description = "description"

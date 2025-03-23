@@ -45,8 +45,7 @@ module "base" {
   #####################
   github_action_service_account_name = "github"
   git_repos = [
-    # "Aviatize/secrets",
-    # "Aviatize/demo-flask-app",
+    # "<github-org>/<github-repo>",
   ]
 
   github_action_service_account_roles = [
@@ -85,11 +84,11 @@ module "base" {
   #########################
 
   bucket_names = ["velero-backup"]
-  # # cloud_storage_admins = ["group:dev-team@aviatize.com"]
-  # cloud_storage_admins = ["user:joydeep@aviatize.com"]
+  # # cloud_storage_admins = ["group:team@<domain>"]
+  # cloud_storage_admins = ["user:<user>@<domain>"]
 
   # bucket_admins = {
-  #   velero-backup = "joydeep@aviatize.com"
+  #   velero-backup = "<user>@<domain>"
   # }
 }
 
@@ -140,6 +139,8 @@ module "gke_dev" {
   project_id = data.google_project.this.project_id
   region     = data.google_client_config.this.region
 
+  domain = "druidsoft.in"
+
   # zones = ["europe-west1-b", "europe-west1-c"]
 
   kubernetes_version = "1.32.2"
@@ -164,7 +165,7 @@ module "gke_dev" {
     },
     {
       cidr_block   = "10.80.0.0/16"
-      display_name = "aviatize_network"
+      display_name = "${local.name}_network"
     },
     {
       cidr_block   = "10.81.0.0/16"
@@ -239,9 +240,9 @@ module "gke_dev" {
 #   source  = "terraform-google-modules/network/google//modules/network-connectivity-center"
 #   version = "10.0.0"
 
-#   project_id          = "aviatize-management"
+#   project_id          = "${local.name}-management"
 #   export_psc          = true
-#   ncc_hub_description = "Aviatize management network connectivity center for all spoke projects and vpcs"
+#   ncc_hub_description = "${local.name} management network connectivity center for all spoke projects and vpcs"
 #   ncc_hub_name        = "central-management-hub"
 
 #   vpc_spokes = {
@@ -253,11 +254,11 @@ module "gke_dev" {
 # }
 
 # resource "google_network_connectivity_spoke" "primary" {
-#   name        = "aviatize-dev"
+#   name        = "${local.name}-dev"
 #   location    = "global"
-#   description = "aviatize dev spoke"
+#   description = "${local.name} dev spoke"
 #   labels = {
-#     label-one = "aviatize-dev"
+#     label-one = "${local.name}-dev"
 #   }
 
 #   hub = google_network_connectivity_hub.basic_hub.id
