@@ -10,7 +10,7 @@ spec:
   source:
     repoURL: https://github.com/defyjoy/Terraform.git
     targetRevision: main
-    path: k8s/gcp/argocd/bootstrap ## Bootstrap all applications from kubernetes/apps folder.
+    path: k8s/argocd/gcp/bootstrap ## Bootstrap all applications from kubernetes/apps folder.
   destination:
     server: https://kubernetes.default.svc # gke control plane url.Also, argocd can connect to cluster externally .So you can mention multiple clusters like - https://x.x.x.x (gke control plane ip)
     namespace: argocd
