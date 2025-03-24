@@ -19,3 +19,8 @@ tasks:
   configure:
     cmds:
       - kustomize build k8s/argocd/gcp/bootstrap | kubectl apply -f -
+
+  destroy:
+    dir: Terraform/GCP/env/dev # '{{.USER_WORKING_DIR}}'
+    cmds:
+      - ./destroy.sh

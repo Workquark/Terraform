@@ -1,0 +1,18 @@
+installCRDs: true
+global:
+  leaderElection:
+    namespace: "cert-manager"
+
+serviceAccount:
+  annotations:
+    iam.gke.io/gcp-service-account: cert-manager@concise-mesh-453415-t8.iam.gserviceaccount.com
+
+extraArgs:
+  - --enable-certificate-owner-ref=true
+  - --dns01-recursive-nameservers-only
+  # - --dns01-recursive-nameservers=8.8.8.8:53,1.1.1.1:53 # Always use single quote and not double. See - https://github.com/cert-manager/cert-manager/issues/1163
+
+podDnsConfig:
+  nameservers:
+  - "1.1.1.1"
+  - "8.8.8.8"
