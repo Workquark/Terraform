@@ -1,0 +1,35 @@
+logLevel: debug
+provider:
+  name: google
+
+extraArgs:
+- --google-project=concise-mesh-453415-t8
+- --google-zone-visibility=public
+- --ignore-ingress-tls-spec
+
+serviceAccount:
+  annotations:
+    iam.gke.io/gcp-service-account: external-dns@concise-mesh-453415-t8.iam.gserviceaccount.com
+
+region: europe-west1
+
+nodeSelector:
+  kubernetes.io/os: linux
+  iam.gke.io/gke-metadata-server-enabled: "true"
+
+ingressClassFilters:
+- nginx
+
+domainFilters:
+- druidsoft.in
+
+# policy: sync
+policy: upsert-only
+
+txtOwnerId: external-dns-public
+
+# -- _Kubernetes_ resources to monitor for DNS entries.
+sources:
+# - service
+- ingress
+

@@ -4,5 +4,11 @@ kind: Kustomization
 namespace: argocd
 
 resources:
+
+  ## SSL Manager
   - cert-manager.yaml
+
+  ## DNS Manager
+  - external-dns.yaml
+  
   # - kafka.yaml
