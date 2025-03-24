@@ -1,0 +1,20 @@
+# Refer to comment here - https://github.com/external-secrets/external-secrets/issues/2273#issuecomment-1529141991
+
+
+serviceAccount:
+  annotations:
+    iam.gke.io/gcp-service-account: external-secrets@concise-mesh-453415-t8.iam.gserviceaccount.com
+
+webhook:
+  create: false
+
+certController:
+  create: false
+
+crds:
+  conversion:
+    enabled: false
+
+resources:
+  limits:
+    memory: 100Mi

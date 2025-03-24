@@ -10,5 +10,7 @@ resources:
 
   ## DNS Manager
   - external-dns.yaml
-  
+
+  ## Secrets Management 
+  - external-secrets.yaml
   # - kafka.yaml
