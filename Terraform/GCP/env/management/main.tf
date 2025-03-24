@@ -161,7 +161,7 @@ module "gke_dev" {
   master_authorized_networks = [
     {
       display_name : "twingate_network",
-      cidr_block : "10.30.21.240/28"
+      cidr_block : "10.80.21.240/28"
     },
     {
       cidr_block   = "10.80.0.0/16"
