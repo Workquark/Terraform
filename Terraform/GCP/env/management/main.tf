@@ -161,7 +161,7 @@ module "gke_dev" {
   master_authorized_networks = [
     {
       display_name : "twingate_network",
-      cidr_block : "10.80.21.240/28"
+      cidr_block : "10.80.21.240/28" # ops subnet
     },
     {
       cidr_block   = "10.80.0.0/16"
@@ -175,7 +175,7 @@ module "gke_dev" {
 
   node_pools = [
     {
-      name         = "dev-pool"
+      name         = "${local.environment}-node-pool"
       machine_type = "e2-standard-2"
 
       min_count          = 1
