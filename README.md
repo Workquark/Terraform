@@ -62,3 +62,23 @@ helm repo update
 helm upgrade -i --wait argocd argo/argo-cd --version 7.8.13 -n argocd --create-namespace -f argocd.values.yaml
 ```
 
+# CONFIGURE OPEN ID 
+
+[https://cloud.google.com/blog/products/identity-security/enabling-keyless-authentication-from-github-actions](https://cloud.google.com/blog/products/identity-security/enabling-keyless-authentication-from-github-actions)
+
+```bash
+gcloud iam workload-identity-pools create "github" \
+  --project=$(gcloud config get project) \
+  --location="global" \
+  --display-name="github identity pool"
+
+
+gcloud iam workload-identity-pools providers create-oidc "github-provider" \
+  --project=$(gcloud config get project) \
+  --location="global" \
+  --workload-identity-pool="github" \
+  --display-name="github action provider" \
+  --attribute-mapping="google.subject=assertion.sub,attribute.actor=assertion.actor,attribute.aud=assertion.aud" \
+  --issuer-uri="https://token.actions.githubusercontent.com" \
+  --attribute-condition="assertion.repository_owner == 'defyjoy'"
+```
