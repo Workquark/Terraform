@@ -11,6 +11,7 @@ env:
 permissions:
   contents: read
   pull-requests: write
+  id-token: write # This is required for requesting the JWT
 
 jobs:
   plan:
