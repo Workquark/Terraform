@@ -29,6 +29,11 @@ tasks:
       - terraform apply -auto-approve
     # silent: true
 
+  destroy:
+    cmds:
+      - terraform destroy -auto-approve
+      
   destroy_all:
     cmds:
+      - helm uninstall --wait argocd -n argocd
       - terraform destroy -auto-approve
