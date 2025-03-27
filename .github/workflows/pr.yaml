@@ -39,7 +39,11 @@ jobs:
           label: management
           # workspace: prod
           var_file: Terraform/GCP/env/management/.auto.tfvars
-          # variables: |
-          #   turbo_mode=true
+          variables: |
+            project_id=${{ secrets.project }}
+            region=eu-west-1
+            auth_token=${{ steps.auth.outputs.access_token }}
+            twingate_api_token=${{ secrets.twingate_api_token }}
+            twingate_admin_group_id=${{ secrets.twingate_admin_group_id }}
           # backend_config_file: env/prod.backend
           # backend_config: token=${{ secrets.BACKEND_TOKEN }}
