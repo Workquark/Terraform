@@ -38,7 +38,7 @@ jobs:
           path: Terraform/GCP/env/management
           label: management
           # workspace: prod
-          var_file: .auto.tfvars
+          var_file: Terraform/GCP/env/management/.auto.tfvars
           # variables: |
           #   turbo_mode=true
           # backend_config_file: env/prod.backend
