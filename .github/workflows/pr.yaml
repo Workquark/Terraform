@@ -1,4 +1,4 @@
-name: PR Plan
+name: PR-PLAN
 
 on: 
   - pull_request
