@@ -45,5 +45,3 @@ jobs:
             auth_token = "${{ steps.auth.outputs.access_token }}"
             twingate_api_token = "${{ secrets.twingate_api_token }}"
             twingate_admin_group_id = "${{ secrets.twingate_admin_group_id }}"
-          # backend_config_file: env/prod.backend
-          # backend_config: token=${{ secrets.BACKEND_TOKEN }}
