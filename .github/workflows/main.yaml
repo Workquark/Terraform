@@ -1,0 +1,49 @@
+name: PR Plan
+
+on: 
+  - pull_request
+
+env:
+  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  # TERRAFORM_CLOUD_TOKENS: terraform.example.com=${{ secrets.TF_REGISTRY_TOKEN }}
+  # TERRAFORM_SSH_KEY: ${{ secrets.TERRAFORM_SSH_KEY }}
+
+permissions:
+  contents: read
+  pull-requests: write
+  id-token: write # This is required for requesting the JWT
+
+jobs:
+  plan:
+    runs-on: ubuntu-latest
+    name: Create Terraform plan
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - id: auth
+        name: Google Authentication
+        uses: google-github-actions/auth@v0.6.0
+        with:
+          # trunk-ignore(checkov/CKV_SECRET_6)
+          project_id: ${{ secrets.project }}
+          token_format: access_token
+          workload_identity_provider: projects/${{ secrets.project_number }}/locations/global/workloadIdentityPools/github/providers/github-provider
+          service_account: github@${{ secrets.project }}.iam.gserviceaccount.com
+          access_token_lifetime: 1300s
+
+      - name: terraform apply
+        uses: dflook/terraform-apply@v1
+        with:
+          path: Terraform/GCP/env/management
+          label: management
+          # workspace: prod
+          var_file: Terraform/GCP/env/management/.auto.tfvars
+          variables: |
+            project_id = "${{ secrets.project }}"
+            region = "europe-west1"
+            auth_token = "${{ steps.auth.outputs.access_token }}"
+            twingate_api_token = "${{ secrets.twingate_api_token }}"
+            twingate_admin_group_id = "${{ secrets.twingate_admin_group_id }}"
+          # backend_config_file: env/prod.backend
+          # backend_config: token=${{ secrets.BACKEND_TOKEN }}
