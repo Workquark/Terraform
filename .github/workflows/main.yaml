@@ -16,7 +16,7 @@ permissions:
 jobs:
   plan:
     runs-on: ubuntu-latest
-    name: Create Terraform plan
+    name: Apply
     steps:
       - name: Checkout
         uses: actions/checkout@v4
