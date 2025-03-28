@@ -41,7 +41,7 @@ jobs:
           var_file: Terraform/GCP/env/management/.auto.tfvars
           variables: |
             project_id = "${{ secrets.project }}"
-            region = "eu-west-1"
+            region = "europe-west1"
             auth_token = "${{ steps.auth.outputs.access_token }}"
             twingate_api_token = "${{ secrets.twingate_api_token }}"
             twingate_admin_group_id = "${{ secrets.twingate_admin_group_id }}"
