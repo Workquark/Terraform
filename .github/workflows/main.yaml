@@ -1,7 +1,9 @@
-name: PR Plan
+name: main
 
 on: 
-  - pull_request
+  push:
+    branches:
+      - main
 
 env:
   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
