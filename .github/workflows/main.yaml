@@ -37,6 +37,7 @@ jobs:
         with:
           path: Terraform/GCP/env/management
           label: management
+          auto_approve: true
           # workspace: prod
           var_file: Terraform/GCP/env/management/.auto.tfvars
           variables: |
