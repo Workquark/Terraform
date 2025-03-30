@@ -8,8 +8,8 @@
 ####################################
 
 module "cloud_dns_zone" {
-  # for_each = { for dns in val.cloud_domains: dns.domain => dns }
-  for_each = var.cloud_domains
+  for_each = { for k, dns in val.cloud_domains : dns.domain => dns if local.create_dns }
+  # for_each = var.cloud_domains
 
   source     = "terraform-google-modules/cloud-dns/google"
   version    = "~> 5.3"

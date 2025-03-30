@@ -11,6 +11,12 @@ module "base" {
   name        = local.name
   region      = "europe-west1"
 
+  #################################
+  #     CONDITIONAL VARIABLES     #
+  #################################
+
+  create_dns = true ## requires also var.cloud_domains to be set if true
+
   #####################
   # NETWORK VARIABLES #
   #####################
