@@ -3,7 +3,15 @@
 version: '3'
 
 vars:
-  GREETING: Hello, World!
+  GREETING: Hello, World! This is great place to live !
+  TERRAFORM_ENV_DIR: "Terraform/GCP/env/"
+  REGION: "europe-west1"
+  TWINGATE_ADMIN_GROUP_ID: "R3JvdXA6MzM3NDAx"
+  TWINGATE_API_TOKEN: "vVY_Y_X0IHjECCprQVywjiw4FvWvYusisNIzTzU9xCBkxacR79SKQaTLKkgQTfc9e0ad5kRXGJgiGDQWDUxF8syN7dCg3K-GOZ4prkoZwgDj1Se2tyRlmyfgKOGYUTleWaxmSg"
+  PROJECT: 
+    sh: gcloud config get project
+  AUTH_TOKEN: 
+    sh: gcloud auth print-access-token
 
 tasks:
   default:
@@ -20,10 +28,38 @@ tasks:
     cmds:
       - kustomize build k8s/argocd/gcp/bootstrap | kubectl apply -f -
 
-  destroy:
-    dir: Terraform/GCP/env/dev # '{{.USER_WORKING_DIR}}'
+  plan_all:
+    dir: "{{ .TERRAFORM_ENV_DIR }}/management" # '{{.USER_WORKING_DIR}}'
+    env:
+      TF_VAR_region: "{{ .REGION }}"
+      TF_VAR_project_id: "{{ .PROJECT }}"
+      TF_VAR_auth_token: "{{ .AUTH_TOKEN }}"
+      TF_VAR_twingate_admin_group_id: "{{ .TWINGATE_ADMIN_GROUP_ID }}"
+      TF_VAR_twingate_api_token: "{{ .TWINGATE_API_TOKEN }}"
     cmds:
-      - ./destroy.sh
+      - terraform destroy -auto-approve
+
+  apply_all:
+    dir: "{{ .TERRAFORM_ENV_DIR }}/management" # '{{.USER_WORKING_DIR}}'
+    env:
+      TF_VAR_region: "{{ .REGION }}"
+      TF_VAR_project_id: "{{ .PROJECT }}"
+      TF_VAR_auth_token: "{{ .AUTH_TOKEN }}"
+      TF_VAR_twingate_admin_group_id: "{{ .TWINGATE_ADMIN_GROUP_ID }}"
+      TF_VAR_twingate_api_token: "{{ .TWINGATE_API_TOKEN }}"
+    cmds:
+      - terraform apply -auto-approve
+
+  destroy_all:
+    dir: "{{ .TERRAFORM_ENV_DIR }}/management" # '{{.USER_WORKING_DIR}}'
+    env:
+      TF_VAR_region: "{{ .REGION }}"
+      TF_VAR_project_id: "{{ .PROJECT }}"
+      TF_VAR_auth_token: "{{ .AUTH_TOKEN }}"
+      TF_VAR_twingate_admin_group_id: "{{ .TWINGATE_ADMIN_GROUP_ID }}"
+      TF_VAR_twingate_api_token: "{{ .TWINGATE_API_TOKEN }}"
+    cmds:
+      - terraform destroy -auto-approve
 
   ## GCP Export variables - For the setup task
   ## export PROJECT=$(gcloud config get project)
@@ -49,5 +85,8 @@ tasks:
       -  gcloud iam roles create DnsCustomPolicy \
           --title="DNS Custom Policy" \
           --description="This role Allows you to set IAM policy for DNS Managed Zones" \
-          --permissions="dns.managedZones.setIamPolicy" \
+          --permissions="dns.managedZones.setIamPolicy" \ 
           --project=$PROJECT
+
+      - ROLES=("roles/storage.admin" "roles/compute.instanceAdmin" "roles/iam.serviceAccountUser")
+      - for ROLE in "${ROLES[@]}"; do gcloud projects add-iam-policy-binding {{ .PROJECT }} --role=$ROLE --member="serviceAccount:github@{{ .PROJECT }}.iam.gserviceaccount.com"; done
