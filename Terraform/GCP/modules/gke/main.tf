@@ -6,7 +6,7 @@ module "gke" {
 
   source = "terraform-google-modules/kubernetes-engine/google//modules/beta-private-cluster"
 
-  version            = "35.0.1"
+  version            = "36.1.0"
   kubernetes_version = var.kubernetes_version #"1.29.6"
 
   name = var.cluster_name
@@ -22,18 +22,19 @@ module "gke" {
 
   zones = var.zones
 
-
   # fleet_project_grant_service_agent = true
   # fleet_project                     = var.project_id
 
   # authenticator_security_group = var.authenticator_security_group == "" ? "gke-security-groups@${var.domain}" : var.authenticator_security_group
   # authenticator_security_group = "<gke-security-groups-name>@<domain>"
 
-  network                     = var.network_name
-  private_endpoint_subnetwork = var.gke_private_endpoint_subnetwork
-  subnetwork                  = var.gke_cluster_subnetwork                   # "gke-cluster-subnet-1"
-  ip_range_pods               = var.gke_cluster_ip_range_pods_subnetwork     #"gke-cluster-pod-subnet-1"
-  ip_range_services           = var.gke_cluster_ip_range_services_subnetwork # "gke-cluster-service-subnet-1"
+  network                     = var.network_configuration.network_name
+  private_endpoint_subnetwork = var.network_configuration.private_endpoint_subnetwork
+  subnetwork                  = var.network_configuration.subnetwork                   # "gke-cluster-subnet-1"
+  ip_range_pods               = var.network_configuration.ip_range_pods_subnetwork     #"gke-cluster-pod-subnet-1"
+  ip_range_services           = var.network_configuration.ip_range_services_subnetwork # "gke-cluster-service-subnet-1"
+  master_ipv4_cidr_block      = var.network_configuration.master_ipv4_cidr_block
+  master_authorized_networks  = var.network_configuration.master_authorized_networks
 
   service_account_name = var.gke_service_account_name
 
@@ -63,10 +64,6 @@ module "gke" {
   master_global_access_enabled = true
   enable_intranode_visibility  = true
   gke_backup_agent_config      = true
-
-  master_ipv4_cidr_block = var.master_ipv4_cidr_block
-
-  master_authorized_networks = var.master_authorized_networks
 
   network_tags = ["${var.name}-${var.environment}"]
 

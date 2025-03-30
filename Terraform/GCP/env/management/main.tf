@@ -156,28 +156,28 @@ module "gke_dev" {
   environment              = local.environment
   gke_service_account_name = "${local.name}-${local.environment}-gke"
 
-  gke_private_endpoint_subnetwork          = "gke-${local.environment}-private-endpoint-subnet-1"
-  gke_cluster_subnetwork                   = "gke-${local.environment}-cluster-subnet-1"
-  gke_cluster_ip_range_pods_subnetwork     = "gke-${local.environment}-cluster-pod-subnet-1"
-  gke_cluster_ip_range_services_subnetwork = "gke-${local.environment}-cluster-service-subnet-1"
-
-  network_name = "${local.name}-${local.environment}-vpc-network"
-
-  master_ipv4_cidr_block = "10.127.0.16/28"
-  master_authorized_networks = [
-    {
-      display_name : "twingate_network",
-      cidr_block : "10.80.21.240/28" # ops subnet
-    },
-    {
-      cidr_block   = "10.80.0.0/16"
-      display_name = "${local.name}_network"
-    },
-    {
-      cidr_block   = "10.81.0.0/16"
-      display_name = "argocd"
-    }
-  ]
+  network_configuration = {
+    network_name                 = module.base.network_name
+    private_endpoint_subnetwork  = "gke-${local.environment}-private-endpoint-subnet-1"
+    subnetwork                   = "gke-${local.environment}-cluster-subnet-1"
+    ip_range_pods_subnetwork     = "gke-${local.environment}-cluster-pod-subnet-1"
+    ip_range_services_subnetwork = "gke-${local.environment}-cluster-service-subnet-1"
+    master_ipv4_cidr_block       = "10.127.0.16/28"
+    master_authorized_networks = [
+      {
+        display_name : "twingate_network",
+        cidr_block : "10.80.21.240/28" # ops subnet
+      },
+      {
+        cidr_block   = "10.80.0.0/16"
+        display_name = "${local.name}_network"
+      },
+      {
+        cidr_block   = "10.81.0.0/16"
+        display_name = "argocd"
+      }
+    ]
+  }
 
   node_pools = [
     {

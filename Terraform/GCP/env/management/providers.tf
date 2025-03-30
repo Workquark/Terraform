@@ -22,12 +22,12 @@ terraform {
   required_providers {
     google = {
       source  = "hashicorp/google"
-      version = "6.12.0"
+      version = "~> 6.27"
     }
 
     google-beta = {
       source  = "hashicorp/google-beta"
-      version = "6.12.0"
+      version = "~> 6.27"
     }
 
     twingate = {

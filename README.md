@@ -73,13 +73,13 @@ REPO="Workquark/Terraform"
 WORKLOAD_IDENTITY_POOL_ID="github"
 
 gcloud iam workload-identity-pools create "github" \
-  --project=$PROJECT_ID \
+  --project=$PROJECT \
   --location="global" \
   --display-name="github identity pool"
 
 
 gcloud iam workload-identity-pools providers create-oidc "github-provider" \
-  --project=$PROJECT_ID \
+  --project=$PROJECT \
   --location="global" \
   --workload-identity-pool="github" \
   --display-name="github action provider" \
