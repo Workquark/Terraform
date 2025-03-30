@@ -28,13 +28,13 @@ module "gke" {
   # authenticator_security_group = var.authenticator_security_group == "" ? "gke-security-groups@${var.domain}" : var.authenticator_security_group
   # authenticator_security_group = "<gke-security-groups-name>@<domain>"
 
-  network                     = var.network.network_name
-  private_endpoint_subnetwork = var.network.gke_private_endpoint_subnetwork
-  subnetwork                  = var.network.gke_cluster_subnetwork                   # "gke-cluster-subnet-1"
-  ip_range_pods               = var.network.gke_cluster_ip_range_pods_subnetwork     #"gke-cluster-pod-subnet-1"
-  ip_range_services           = var.network.gke_cluster_ip_range_services_subnetwork # "gke-cluster-service-subnet-1"
-  master_ipv4_cidr_block      = var.network.master_ipv4_cidr_block
-  master_authorized_networks  = var.network.master_authorized_networks
+  network                     = var.network_configuration.network_name
+  private_endpoint_subnetwork = var.network_configuration.gke_private_endpoint_subnetwork
+  subnetwork                  = var.network_configuration.gke_cluster_subnetwork                   # "gke-cluster-subnet-1"
+  ip_range_pods               = var.network_configuration.gke_cluster_ip_range_pods_subnetwork     #"gke-cluster-pod-subnet-1"
+  ip_range_services           = var.network_configuration.gke_cluster_ip_range_services_subnetwork # "gke-cluster-service-subnet-1"
+  master_ipv4_cidr_block      = var.network_configuration.master_ipv4_cidr_block
+  master_authorized_networks  = var.network_configuration.master_authorized_networks
 
   service_account_name = var.gke_service_account_name
 
