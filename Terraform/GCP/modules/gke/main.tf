@@ -29,10 +29,10 @@ module "gke" {
   # authenticator_security_group = "<gke-security-groups-name>@<domain>"
 
   network                     = var.network_configuration.network_name
-  private_endpoint_subnetwork = var.network_configuration.gke_private_endpoint_subnetwork
-  subnetwork                  = var.network_configuration.gke_cluster_subnetwork                   # "gke-cluster-subnet-1"
-  ip_range_pods               = var.network_configuration.gke_cluster_ip_range_pods_subnetwork     #"gke-cluster-pod-subnet-1"
-  ip_range_services           = var.network_configuration.gke_cluster_ip_range_services_subnetwork # "gke-cluster-service-subnet-1"
+  private_endpoint_subnetwork = var.network_configuration.private_endpoint_subnetwork
+  subnetwork                  = var.network_configuration.subnetwork                   # "gke-cluster-subnet-1"
+  ip_range_pods               = var.network_configuration.ip_range_pods_subnetwork     #"gke-cluster-pod-subnet-1"
+  ip_range_services           = var.network_configuration.ip_range_services_subnetwork # "gke-cluster-service-subnet-1"
   master_ipv4_cidr_block      = var.network_configuration.master_ipv4_cidr_block
   master_authorized_networks  = var.network_configuration.master_authorized_networks
 

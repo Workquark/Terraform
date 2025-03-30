@@ -28,13 +28,13 @@ variable "authenticator_security_group" {
 
 variable "network_configuration" {
   type = object({
-    network_name                = string
-    private_endpoint_subnetwork = string
-    subnetwork                  = string
-    ip_range_pods               = list(string)
-    ip_range_services           = list(string)
-    master_ipv4_cidr_block      = string
-    master_authorized_networks  = list(map(string))
+    network_name                 = string
+    subnetwork                   = string
+    private_endpoint_subnetwork  = string
+    ip_range_pods_subnetwork     = list(string)
+    ip_range_services_subnetwork = list(string)
+    master_ipv4_cidr_block       = string
+    master_authorized_networks   = list(map(string))
   })
 
   description = "description"

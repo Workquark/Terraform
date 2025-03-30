@@ -157,12 +157,12 @@ module "gke_dev" {
   gke_service_account_name = "${local.name}-${local.environment}-gke"
 
   network_configuration = {
-    network_name                = module.base.network_name
-    private_endpoint_subnetwork = "gke-${local.environment}-private-endpoint-subnet-1"
-    subnetwork                  = "gke-${local.environment}-cluster-subnet-1"
-    ip_range_pods               = "gke-${local.environment}-cluster-pod-subnet-1"
-    ip_range_services           = "gke-${local.environment}-cluster-service-subnet-1"
-    master_ipv4_cidr_block      = "10.127.0.16/28"
+    network_name                 = module.base.network_name
+    private_endpoint_subnetwork  = "gke-${local.environment}-private-endpoint-subnet-1"
+    subnetwork                   = "gke-${local.environment}-cluster-subnet-1"
+    ip_range_pods_subnetwork     = "gke-${local.environment}-cluster-pod-subnet-1"
+    ip_range_services_subnetwork = "gke-${local.environment}-cluster-service-subnet-1"
+    master_ipv4_cidr_block       = "10.127.0.16/28"
     master_authorized_networks = [
       {
         display_name : "twingate_network",
