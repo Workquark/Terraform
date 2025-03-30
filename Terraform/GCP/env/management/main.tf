@@ -157,7 +157,7 @@ module "gke_dev" {
   gke_service_account_name = "${local.name}-${local.environment}-gke"
 
   network_configuration = {
-    network                     = module.base.network_name
+    network_name                = module.base.network_name
     private_endpoint_subnetwork = "gke-${local.environment}-private-endpoint-subnet-1"
     subnetwork                  = "gke-${local.environment}-cluster-subnet-1"
     ip_range_pods               = "gke-${local.environment}-cluster-pod-subnet-1"
