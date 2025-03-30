@@ -92,4 +92,11 @@ gcloud iam service-accounts add-iam-policy-binding "github@$PROJECT.iam.gservice
   --project=$PROJECT \
   --role="roles/iam.workloadIdentityUser" \
   --member="principalSet://iam.googleapis.com/projects/${PROJECT_ID}/locations/global/workloadIdentityPools/github/attribute.repository/${REPO}"
+
+
+ gcloud iam roles create DnsCustomPolicy \
+  --title="DNS Custom Policy" \
+  --description="This role Allows you to set IAM policy for DNS Managed Zones" \
+  --permissions="dns.managedZones.setIamPolicy" \
+  --project=$PROJECT
 ```

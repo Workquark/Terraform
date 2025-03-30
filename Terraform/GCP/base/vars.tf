@@ -211,3 +211,19 @@ variable "cross_project_principalsets" {
   default     = []
 }
 
+################################################################
+##              CONDITIONAL VARIABLES                         ##
+################################################################
+
+variable "create_dns" {
+  type        = bool
+  description = "create dns if this is true"
+  default     = false
+
+  validation {
+    condition     = var.create_dns == true || var.create_dns == false
+    error_message = "create_dns must be true or false. requires also var.cloud_domains to be set if true"
+  }
+}
+
+
