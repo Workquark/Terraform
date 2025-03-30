@@ -4,10 +4,12 @@ version: '3'
 
 vars:
   GREETING: Hello, World! This is great place to live ! 
-  TF_VAR_region: "europe-west1"
-  TF_VAR_project_id: 
+  REGION: "europe-west1"
+  TWINGATE_ADMIN_GROUP_ID: "R3JvdXA6MzM3NDAx"
+  TWINGATE_API_TOKEN: "vVY_Y_X0IHjECCprQVywjiw4FvWvYusisNIzTzU9xCBkxacR79SKQaTLKkgQTfc9e0ad5kRXGJgiGDQWDUxF8syN7dCg3K-GOZ4prkoZwgDj1Se2tyRlmyfgKOGYUTleWaxmSg"
+  PROJECT: 
     sh: gcloud config get project
-  TF_VAR_auth_token: 
+  AUTH_TOKEN: 
     sh: gcloud auth print-access-token
 
 tasks:
@@ -16,9 +18,15 @@ tasks:
       - echo "{{.GREETING}}"
     silent: true
 
-  plan:
+  plan_all:
+    env:
+      TF_VAR_region: "{{ .REGION }}"
+      TF_VAR_project_id: "{{ .PROJECT }}"
+      TF_VAR_auth_token: "{{ .AUTH_TOKEN }}"
+      TF_VAR_twingate_admin_group_id: "{{ .TWINGATE_ADMIN_GROUP_ID }}"
+      TF_VAR_twingate_api_token: "{{ .TWINGATE_API_TOKEN }}"
     cmds:
-      - echo "Auth Token - {{.TF_VAR_auth_token}}"
+      - echo "{{.TF_VAR_project_id}}"
       - terraform init
       - terraform plan
       - terraform output

@@ -14,5 +14,5 @@ locals {
   dns_names = [for dns, domain in var.cloud_domains : trimsuffix(replace(dns, ".", "-"), "-")]
 
 
-  create_dns = try(var.create_dns && var.cloud_domains > 0, false)
+  create_dns = try(var.create_dns && length(var.cloud_domains) > 0, false)
 }
