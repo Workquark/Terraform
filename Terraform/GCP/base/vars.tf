@@ -216,7 +216,7 @@ variable "cross_project_principalsets" {
 ################################################################
 
 variable "create_dns" {
-  type        = "bool"
+  type        = bool
   description = "create dns if this is true"
   default     = false
 
