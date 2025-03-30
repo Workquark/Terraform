@@ -4,7 +4,8 @@ version: '3'
 
 vars:
   GREETING: Hello, World! This is great place to live !
-  TERRAFORM_ENV_DIR: Terraform/GCP/env/
+  CLOUD: GCP
+  TERRAFORM_ENV_DIR: Terraform/{{ .CLOUD }}/env/
   REGION: europe-west1
   TWINGATE_ADMIN_GROUP_ID: R3JvdXA6MzM3NDAx
   TWINGATE_API_TOKEN: vVY_Y_X0IHjECCprQVywjiw4FvWvYusisNIzTzU9xCBkxacR79SKQaTLKkgQTfc9e0ad5kRXGJgiGDQWDUxF8syN7dCg3K-GOZ4prkoZwgDj1Se2tyRlmyfgKOGYUTleWaxmSg
@@ -58,7 +59,7 @@ tasks:
       TF_VAR_twingate_admin_group_id: "{{ .TWINGATE_ADMIN_GROUP_ID }}"
       TF_VAR_twingate_api_token: "{{ .TWINGATE_API_TOKEN }}"
     cmds:
-      - terraform destroy -auto-approve
+      - terraform plan
 
   apply_all:
     dir: "{{ .TERRAFORM_ENV_DIR }}/management" # '{{.USER_WORKING_DIR}}'
