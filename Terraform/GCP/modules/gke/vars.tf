@@ -38,7 +38,6 @@ variable "network_configuration" {
   })
 
   description = "description"
-  default     = {}
 }
 
 variable "node_pools" {
