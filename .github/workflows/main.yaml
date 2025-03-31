@@ -59,7 +59,10 @@ jobs:
         id: install
 
       - name: use gcloud cli
+        env:
+          USE_GKE_GCLOUD_AUTH_PLUGIN: True
         run: |
+          gcloud components install gke-gcloud-auth-plugin
           gcloud container clusters get-credentials jrc-online-management-gke-cluster --region europe-west1
           kubectl get pods -A
 
