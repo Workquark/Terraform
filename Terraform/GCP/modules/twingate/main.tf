@@ -184,12 +184,13 @@ resource "twingate_resource" "twingate_resources" {
     }
   }
 
-  # dynamic "access_service" {
-  #   for_each = [twingate_service_account.github_actions_prod.id]
-  #   content {
-  #     service_account_id = access_service.value
-  #   }
-  # }
+
+  dynamic "access_service" {
+    for_each = [twingate_service_account.github_actions.id]
+    content {
+      service_account_id = access_service.value
+    }
+  }
 
   is_active = true
 
