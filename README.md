@@ -85,7 +85,7 @@ gcloud iam workload-identity-pools providers create-oidc "github-provider" \
   --display-name="github action provider" \
   --attribute-mapping="google.subject=assertion.sub,attribute.actor=assertion.actor,attribute.aud=assertion.aud" \
   --issuer-uri="https://token.actions.githubusercontent.com" \
-  --attribute-condition="assertion.repository_owner == 'defyjoy'"
+  --attribute-condition="assertion.repository_owner == 'Workquark'"
 
 
 gcloud iam service-accounts add-iam-policy-binding "github@$PROJECT.iam.gserviceaccount.com" \

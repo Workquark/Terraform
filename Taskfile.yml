@@ -4,30 +4,52 @@ version: '3'
 
 vars:
   GREETING: Hello, World! This is great place to live !
-  TERRAFORM_ENV_DIR: "Terraform/GCP/env/"
-  REGION: "europe-west1"
-  TWINGATE_ADMIN_GROUP_ID: "R3JvdXA6MzM3NDAx"
-  TWINGATE_API_TOKEN: "vVY_Y_X0IHjECCprQVywjiw4FvWvYusisNIzTzU9xCBkxacR79SKQaTLKkgQTfc9e0ad5kRXGJgiGDQWDUxF8syN7dCg3K-GOZ4prkoZwgDj1Se2tyRlmyfgKOGYUTleWaxmSg"
+  CLOUD: GCP
+  TERRAFORM_ENV_DIR: Terraform/{{ .CLOUD }}/env/
+  REGION: europe-west1
+  TWINGATE_ADMIN_GROUP_ID: R3JvdXA6MzM3NDAx
+  TWINGATE_API_TOKEN: vVY_Y_X0IHjECCprQVywjiw4FvWvYusisNIzTzU9xCBkxacR79SKQaTLKkgQTfc9e0ad5kRXGJgiGDQWDUxF8syN7dCg3K-GOZ4prkoZwgDj1Se2tyRlmyfgKOGYUTleWaxmSg
   PROJECT: 
     sh: gcloud config get project
   AUTH_TOKEN: 
     sh: gcloud auth print-access-token
 
 tasks:
-  default:
+  prerequisites:
     cmds:
-      - echo "{{.GREETING}} {{.USER_NAME}}"
-    silent: true
+      # create iam workload identity pool
+      - gcloud iam workload-identity-pools create "github" --project={{ .PROJECT }} --location="global" --display-name="github identity pool"
 
-  install:
-      - helm repo add argo https://argoproj.github.io/argo-helm
-      - helm repo update
-      - helm upgrade -i --wait argocd argo/argo-cd --version 7.8.13 -n argocd --create-namespace -f ./k8s/argocd/gcp/manifests/helmcharts/argocd/argocd.values.yaml
-    
-  configure:
-    cmds:
-      - kustomize build k8s/argocd/gcp/bootstrap | kubectl apply -f -
+      # create oidc provider
+      - gcloud iam workload-identity-pools providers create-oidc "github-provider" \
+          --project={{ .PROJECT }} \
+          --location="global" \
+          --workload-identity-pool="github" \
+          --display-name="github action provider" \
+          --attribute-mapping="google.subject=assertion.sub,attribute.actor=assertion.actor,attribute.aud=assertion.aud" \
+          --issuer-uri="https://token.actions.githubusercontent.com" \
+          --attribute-condition="assertion.repository_owner == {{ .REPO_OWNER }}"
 
+      # create github service account
+      - gcloud iam service-accounts add-iam-policy-binding "github@{{ .PROJECT }}.iam.gserviceaccount.com" \
+          --project={{ .PROJECT }} \
+          --role="roles/iam.workloadIdentityUser" \
+          --member="principalSet://iam.googleapis.com/projects/{{ .PROJECT_ID }}/locations/global/workloadIdentityPools/github/attribute.repository/${REPO}"
+
+      # create dns custom policy
+      -  gcloud iam roles create DnsCustomPolicy \
+          --title="DNS Custom Policy" \
+          --description="This role Allows you to set IAM policy for DNS Managed Zones" \
+          --permissions="dns.managedZones.setIamPolicy" \ 
+          --project=$PROJECT
+
+      # add roles to github service account
+      - ROLES=("roles/storage.admin" "roles/compute.instanceAdmin" "roles/iam.serviceAccountUser")
+      - for ROLE in "${ROLES[@]}"; do gcloud projects add-iam-policy-binding {{ .PROJECT }} --role=$ROLE --member="serviceAccount:github@{{ .PROJECT }}.iam.gserviceaccount.com"; done
+
+  ## GCP Export variables - For the setup task
+  ## export PROJECT=$(gcloud config get project)
+  ## export PROJECT_ID=$(gcloud projects describe $PROJECT --format="value(projectNumber)")
   plan_all:
     dir: "{{ .TERRAFORM_ENV_DIR }}/management" # '{{.USER_WORKING_DIR}}'
     env:
@@ -37,7 +59,7 @@ tasks:
       TF_VAR_twingate_admin_group_id: "{{ .TWINGATE_ADMIN_GROUP_ID }}"
       TF_VAR_twingate_api_token: "{{ .TWINGATE_API_TOKEN }}"
     cmds:
-      - terraform destroy -auto-approve
+      - terraform plan
 
   apply_all:
     dir: "{{ .TERRAFORM_ENV_DIR }}/management" # '{{.USER_WORKING_DIR}}'
@@ -61,32 +83,12 @@ tasks:
     cmds:
       - terraform destroy -auto-approve
 
-  ## GCP Export variables - For the setup task
-  ## export PROJECT=$(gcloud config get project)
-  ## export PROJECT_ID=$(gcloud projects describe $PROJECT --format="value(projectNumber)")
-  
-  prerequisites:
+  prep:
     cmds:
-      - gcloud iam workload-identity-pools create "github" --project={{ .PROJECT }} --location="global" --display-name="github identity pool"
-      - gcloud iam workload-identity-pools providers create-oidc "github-provider" \
-          --project={{ .PROJECT }} \
-          --location="global" \
-          --workload-identity-pool="github" \
-          --display-name="github action provider" \
-          --attribute-mapping="google.subject=assertion.sub,attribute.actor=assertion.actor,attribute.aud=assertion.aud" \
-          --issuer-uri="https://token.actions.githubusercontent.com" \
-          --attribute-condition="assertion.repository_owner == {{ .REPO_OWNER }}"
-
-      - gcloud iam service-accounts add-iam-policy-binding "github@{{ .PROJECT }}.iam.gserviceaccount.com" \
-          --project={{ .PROJECT }} \
-          --role="roles/iam.workloadIdentityUser" \
-          --member="principalSet://iam.googleapis.com/projects/{{ .PROJECT_ID }}/locations/global/workloadIdentityPools/github/attribute.repository/${REPO}"
-
-      -  gcloud iam roles create DnsCustomPolicy \
-          --title="DNS Custom Policy" \
-          --description="This role Allows you to set IAM policy for DNS Managed Zones" \
-          --permissions="dns.managedZones.setIamPolicy" \ 
-          --project=$PROJECT
-
-      - ROLES=("roles/storage.admin" "roles/compute.instanceAdmin" "roles/iam.serviceAccountUser")
-      - for ROLE in "${ROLES[@]}"; do gcloud projects add-iam-policy-binding {{ .PROJECT }} --role=$ROLE --member="serviceAccount:github@{{ .PROJECT }}.iam.gserviceaccount.com"; done
+      - helm repo add argo https://argoproj.github.io/argo-helm
+      - helm repo update
+      - helm upgrade -i --wait argocd argo/argo-cd --version 7.8.13 -n argocd --create-namespace -f ./k8s/argocd/gcp/manifests/helmcharts/argocd/argocd.values.yaml
+    
+  bootstrap:
+    cmds:
+      - kustomize build k8s/argocd/gcp/bootstrap | kubectl apply -f -
