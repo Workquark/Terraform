@@ -54,9 +54,12 @@ jobs:
         with:
           version: '>= 515.0.0'
 
-
       - uses: azure/setup-kubectl@v4
         id: install
+
+      - uses: twingate/github-action@v1
+        with:
+          service-key: ${{ secrets.TWINGATE_SERVICE_ACCOUNT_SECRET_KEY }}
 
       - name: use gcloud cli
         env:
