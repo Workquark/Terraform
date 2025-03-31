@@ -54,6 +54,8 @@ terraform {
       source  = "integrations/github"
       version = "6.6.0"
     }
+
+
   }
   backend "gcs" {
     bucket = "jrc-practice-01-dev-terraform-backend-bucket"
