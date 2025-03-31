@@ -1,0 +1,25 @@
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: rancher
+spec:
+  project: default
+  sources:
+    - repoURL: https://github.com/Workquark/Terraform.git
+      ref: argo
+    - repoURL: https://releases.rancher.com/server-charts/latest
+      chart: cattle-system
+      targetRevision: 2.10.3
+      helm:
+        valueFiles:
+        - $argo/k8s/argocd/gcp/manifests/helmcharts/rancher/default.values.yaml
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: cattle-system
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - Validate=false

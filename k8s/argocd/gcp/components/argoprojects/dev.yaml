@@ -12,7 +12,7 @@ metadata:
 spec:
   sourceRepos:
     - https://grafana.github.io/helm-charts
-    - https://github.com/defyjoy/Terraform.git
+    - https://github.com/Workquark/Terraform.git
     - https://prometheus-community.github.io/helm-charts
     - registry-1.docker.io/bitnamicharts
   destinations:

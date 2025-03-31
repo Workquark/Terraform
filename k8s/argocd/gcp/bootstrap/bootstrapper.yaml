@@ -8,7 +8,7 @@ metadata:
 spec:
   project: default
   source:
-    repoURL: https://github.com/defyjoy/Terraform.git
+    repoURL: https://github.com/Workquark/Terraform.git
     targetRevision: main
     path: k8s/argocd/gcp/bootstrap ## Bootstrap all applications from kubernetes/apps folder.
   destination:
