@@ -48,3 +48,18 @@ jobs:
             twingate_admin_group_id = "${{ secrets.twingate_admin_group_id }}"
           # backend_config_file: env/prod.backend
           # backend_config: token=${{ secrets.BACKEND_TOKEN }}
+
+      - name: 'Set up Cloud SDK'
+        uses: 'google-github-actions/setup-gcloud@v2'
+        with:
+          version: '>= 515.0.0'
+
+
+      - uses: azure/setup-kubectl@v4
+        id: install
+
+      - name: use gcloud cli
+        run: |
+          gcloud container clusters get-credentials jrc-online-management-gke-cluster --region europe-west1
+          kubectl get pods -A
+
