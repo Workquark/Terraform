@@ -58,6 +58,10 @@ variable "twingate_admin_group_id" {
 ###################################################
 ### ARGOCD GITHUB DEX OAUTH SECRETS AND CREDS  ####
 ###################################################
+variable "github_token" {
+  type        = string
+  description = "github token"
+}
 
 
 variable "github_app_oauth_clientid" {
@@ -73,15 +77,16 @@ variable "github_app_oauth_client_secret" {
 }
 
 # Ref - https://stackoverflow.com/questions/74462420/where-can-we-find-github-apps-installation-id
-variable "github_app_installation_id" {
-  type        = string
-  description = "github app installation id . used for github action runner scale set"
-  default     = ""
-}
 
 variable "github_app_id" {
   type        = string
   description = "This is github app id"
+  default     = ""
+}
+
+variable "github_app_installation_id" {
+  type        = string
+  description = "github app installation id . used for github action runner scale set"
   default     = ""
 }
 
