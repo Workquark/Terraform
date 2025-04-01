@@ -8,6 +8,7 @@
     "subsetting",
     "tfvars",
     "twingate",
-    "velero"
+    "velero",
+    "Workquark"
   ]
 }

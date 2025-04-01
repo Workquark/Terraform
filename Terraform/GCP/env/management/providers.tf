@@ -49,6 +49,13 @@ terraform {
       source  = "hashicorp/null"
       version = "~> 3.2.0"
     }
+
+    github = {
+      source  = "integrations/github"
+      version = "6.6.0"
+    }
+
+
   }
   backend "gcs" {
     bucket = "jrc-practice-01-dev-terraform-backend-bucket"
@@ -58,6 +65,11 @@ terraform {
 
 data "google_client_config" "default" {
   depends_on = [module.gke_dev]
+}
+
+provider "github" {
+  owner = "Workquark"
+  token = var.github_token
 }
 
 # provider "kubernetes" {
