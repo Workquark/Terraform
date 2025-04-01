@@ -56,24 +56,33 @@ jobs:
         with:
           path: Terraform/GCP/env/management
 
-      - name: 'print service acc key'
-        run: |
-          echo ${{ steps.tf_apply_output.outputs.twingate_service_account_key }}
+      # - name: 'print service acc key'
+      #   run: |
+      #     echo ${{ steps.tf_apply_output.outputs.twingate_service_account_key }}
 
       - name: 'Set up Cloud SDK'
         uses: 'google-github-actions/setup-gcloud@v2'
         with:
           version: '>= 515.0.0'
 
-      - uses: azure/setup-kubectl@v4
-        id: install
 
       - uses: twingate/github-action@v1
         with:
           service-key: ${{ steps.tf_apply_output.outputs.twingate_service_account_key }}
           # service-key: ${{ secrets.TWINGATE_SERVICE_ACCOUNT_SECRET_KEY }}
 
-      - name: use gcloud cli
+
+      - name: setup kubectl
+        uses: azure/setup-kubectl@v4
+        id: install
+
+      - name: setup kustomize
+        uses: imranismail/setup-kustomize@v2
+
+      - uses: azure/setup-helm@v4.3.0
+        id: install
+
+      - name: get cluster credentials
         env:
           USE_GKE_GCLOUD_AUTH_PLUGIN: True
         run: |
@@ -81,3 +90,12 @@ jobs:
           gcloud container clusters get-credentials jrc-online-management-gke-cluster --region europe-west1
           kubectl get pods -A
 
+      - name: Install Task
+        uses: arduino/setup-task@v2
+        with:
+          version: 3.x
+
+      - name: Run tasks
+        run: |
+          task prepare_argocd
+          task bootstrap
