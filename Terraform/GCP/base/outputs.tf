@@ -21,11 +21,6 @@ output "global_static_ip_name" {
   value       = google_compute_global_address.global_static_ip.name
 }
 
-output "twingate_service_account_key" {
-  description = "description"
-  value       = value
-}
-
 
 # output "endpoints" {
 #   value       = module.gke.endpoints
