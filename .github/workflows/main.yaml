@@ -50,6 +50,12 @@ jobs:
           # backend_config_file: env/prod.backend
           # backend_config: token=${{ secrets.BACKEND_TOKEN }}
 
+      - name: Get outputs
+        uses: dflook/terraform-output@v1
+        id: tf_apply_output
+        with:
+          path: Terraform/GCP/env/management
+
       - name: 'Set up Cloud SDK'
         uses: 'google-github-actions/setup-gcloud@v2'
         with:
@@ -60,7 +66,8 @@ jobs:
 
       - uses: twingate/github-action@v1
         with:
-          service-key: ${{ secrets.TWINGATE_SERVICE_ACCOUNT_SECRET_KEY }}
+          service-key: ${{ steps.tf_apply_output.outputs.twingate_service_account_key }}
+          # service-key: ${{ secrets.TWINGATE_SERVICE_ACCOUNT_SECRET_KEY }}
 
       - name: use gcloud cli
         env:
