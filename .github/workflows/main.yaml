@@ -72,17 +72,18 @@ jobs:
           # service-key: ${{ secrets.TWINGATE_SERVICE_ACCOUNT_SECRET_KEY }}
 
 
-      - name: setup kubectl
+      - name: Install kubectl
         uses: azure/setup-kubectl@v4
-        id: install
+        id: kubectl
 
-      - name: setup kustomize
+      - name: Install kustomize
         uses: imranismail/setup-kustomize@v2
 
-      - uses: azure/setup-helm@v4.3.0
-        id: install
+      - name: Install Helm
+        uses: azure/setup-helm@v4.3.0
+        id: helm
 
-      - name: get cluster credentials
+      - name: Get cluster credentials
         env:
           USE_GKE_GCLOUD_AUTH_PLUGIN: True
         run: |
