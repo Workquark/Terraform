@@ -13,6 +13,7 @@ output "global_static_ip_name" {
 output "twingate_service_account_key" {
   description = "description"
   value       = module.twingate.twingate_service_account_key
+  sensitive   = true
 }
 
 # output "dev_master_ipv4_cidr_block" {
