@@ -6,8 +6,8 @@ vars:
   GREETING: Hello, World! This is great place to live !
   ENVIRONMENT: management 
   CLUSTER_NAME: jrc-online-management-gke-cluster
-  CLOUD: GCP
-  TERRAFORM_ENV_DIR: Terraform/{{ .CLOUD }}/env/
+  CLOUD_PROVIDER: GCP
+  TERRAFORM_DIR: Terraform/{{ .CLOUD_PROVIDER }}/env/
   REGION: europe-west1
   TWINGATE_ADMIN_GROUP_ID: R3JvdXA6MzM3NDAx
   TWINGATE_API_TOKEN: vVY_Y_X0IHjECCprQVywjiw4FvWvYusisNIzTzU9xCBkxacR79SKQaTLKkgQTfc9e0ad5kRXGJgiGDQWDUxF8syN7dCg3K-GOZ4prkoZwgDj1Se2tyRlmyfgKOGYUTleWaxmSg
@@ -53,7 +53,7 @@ tasks:
   ## export PROJECT=$(gcloud config get project)
   ## export PROJECT_ID=$(gcloud projects describe $PROJECT --format="value(projectNumber)")
   plan_all:
-    dir: "{{ .TERRAFORM_ENV_DIR }}/{{ .ENVIRONMENT }}" # '{{.USER_WORKING_DIR}}'
+    dir: "{{ .TERRAFORM_DIR }}/{{ .ENVIRONMENT }}" # '{{.USER_WORKING_DIR}}'
     env:
       TF_VAR_region: "{{ .REGION }}"
       TF_VAR_project_id: "{{ .PROJECT }}"
@@ -64,7 +64,7 @@ tasks:
       - terraform plan
 
   apply_all:
-    dir: "{{ .TERRAFORM_ENV_DIR }}/{{ .ENVIRONMENT }}" # '{{.USER_WORKING_DIR}}'
+    dir: "{{ .TERRAFORM_DIR }}/{{ .ENVIRONMENT }}" # '{{.USER_WORKING_DIR}}'
     env:
       TF_VAR_region: "{{ .REGION }}"
       TF_VAR_project_id: "{{ .PROJECT }}"
@@ -73,9 +73,11 @@ tasks:
       TF_VAR_twingate_api_token: "{{ .TWINGATE_API_TOKEN }}"
     cmds:
       - terraform apply -auto-approve
+      - task: apply_argocd
+      - task: bootstrap
 
   destroy_all:
-    dir: "{{ .TERRAFORM_ENV_DIR }}/{{ .ENVIRONMENT }}" # '{{.USER_WORKING_DIR}}'
+    dir: "{{ .TERRAFORM_DIR }}/{{ .ENVIRONMENT }}" # '{{.USER_WORKING_DIR}}'
     env:
       TF_VAR_region: "{{ .REGION }}"
       TF_VAR_project_id: "{{ .PROJECT }}"
@@ -87,12 +89,16 @@ tasks:
       - helm uninstall argocd -n argocd
       - terraform destroy -auto-approve
 
-  prepare_argocd:
+  bootstrap:
+    aliases:
+      - bootstrap
+    cmds:
+      - kustomize build k8s/argocd/gcp/bootstrap | kubectl apply -f -
+
+  install_argocd:
+    aliases:
+      - install
     cmds:
       - helm repo add argo https://argoproj.github.io/argo-helm
       - helm repo update
       - helm upgrade -i --wait argocd argo/argo-cd --version 7.8.13 -n argocd --create-namespace -f ./k8s/argocd/gcp/manifests/helmcharts/argocd/argocd.values.yaml
-    
-  bootstrap:
-    cmds:
-      - kustomize build k8s/argocd/gcp/bootstrap | kubectl apply -f -

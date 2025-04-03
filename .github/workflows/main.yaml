@@ -7,6 +7,7 @@ on:
 
 env:
   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  CLOUD_PROVIDER: GCP
 
 permissions:
   contents: read
@@ -35,11 +36,11 @@ jobs:
       - name: terraform apply
         uses: dflook/terraform-apply@v1
         with:
-          path: Terraform/GCP/env/management
+          path: Terraform/${{ env.CLOUD_PROVIDER }}/env/management
           label: management
           auto_approve: true
           # workspace: prod
-          var_file: Terraform/GCP/env/management/.auto.tfvars
+          var_file: Terraform/${{ env.CLOUD_PROVIDER }}/env/management/.auto.tfvars
           variables: |
             github_token = "${{ secrets.gh_token }}"
             project_id = "${{ secrets.project }}"
@@ -54,7 +55,7 @@ jobs:
         uses: dflook/terraform-output@v1
         id: tf_apply_output
         with:
-          path: Terraform/GCP/env/management
+          path: Terraform/${{ env.CLOUD_PROVIDER }}/env/management
 
       # - name: 'print service acc key'
       #   run: |
@@ -96,7 +97,9 @@ jobs:
         with:
           version: 3.x
 
+      ## - STEP-1 : Install ArgoCD 
+      ## - STEP-2 : Bootstrap Applications
       - name: Run tasks
         run: |
-          task prepare_argocd
+          task install
           task bootstrap
