@@ -1,0 +1,11 @@
+
+- op: add
+  path: /spec/acme/solvers
+  value:
+    - dns01:
+        cloudDNS:
+          # The ID of the GCP project
+          project: concise-mesh-453415-t8
+      selector:
+        dnsZones:
+        - druidsoft.in

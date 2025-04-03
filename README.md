@@ -99,4 +99,10 @@ gcloud iam service-accounts add-iam-policy-binding "github@$PROJECT.iam.gservice
   --description="This role Allows you to set IAM policy for DNS Managed Zones" \
   --permissions="dns.managedZones.setIamPolicy" \
   --project=$PROJECT
+
+  export SERVICE_ACCOUNT_NAME="github"
+  export PROJECT=$(gcloud config get project)
+  kubectl create clusterrolebinding $SERVICE_ACCOUNT_NAME \
+      --clusterrole cluster-admin \
+      --user $SERVICE_ACCOUNT_NAME@$PROJECT.iam.gserviceaccount.com
 ```
