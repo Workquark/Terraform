@@ -81,6 +81,7 @@ tasks:
       TF_VAR_twingate_admin_group_id: "{{ .TWINGATE_ADMIN_GROUP_ID }}"
       TF_VAR_twingate_api_token: "{{ .TWINGATE_API_TOKEN }}"
     cmds:
+      - helm uninstall argocd -n argocd
       - terraform destroy -auto-approve
 
   prepare_argocd:
