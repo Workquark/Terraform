@@ -149,7 +149,7 @@ module "gke_dev" {
 
   # zones = ["europe-west1-b", "europe-west1-c"]
 
-  kubernetes_version = "1.32.2"
+  kubernetes_version = "1.31.6" # "1.32.2"
   release_channel    = "REGULAR"
 
   name                     = local.name
