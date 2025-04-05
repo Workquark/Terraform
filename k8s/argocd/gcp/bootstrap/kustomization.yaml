@@ -9,6 +9,7 @@ resources:
   - ../components/applications
   - ../components/applicationsets
   - ../components/argoprojects
+  - ../components/clusters
   
   ## Individual bootstrap
   - bootstrapper.yaml

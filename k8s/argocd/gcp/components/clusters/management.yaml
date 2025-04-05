@@ -1,0 +1,17 @@
+apiVersion: v1
+kind: Secret
+type: Opaque
+metadata:
+  namespace: argocd 
+  annotations:
+    managed-by: argocd.argoproj.io
+    argocd.argoproj.io/sync-options: Replace=true
+  labels:
+    argocd.argoproj.io/secret-type: cluster
+    cluster: management
+  name: cluster-kubernetes.default.svc
+stringData:
+  tlsClientConfig: |-
+    insecure: false
+  name: management
+  server: https://kubernetes.default.svc
