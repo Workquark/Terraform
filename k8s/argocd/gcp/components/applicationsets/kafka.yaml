@@ -32,10 +32,10 @@ spec:
           targetRevision: 0.45.0
           helm:
             valueFiles:
-            - $argo/k8s/argocd/gcp/manifests/helmcharts/cert-manager/{{name}}.values.yaml
+            - $argo/k8s/argocd/gcp/manifests/helmcharts/strimzi-kafka/{{name}}.values.yaml
         - repoURL: https://github.com/Workquark/Terraform.git
           targetRevision: main
-          path: k8s/argocd/gcp/manifests/kustomize/cert-manager/overlays/{{name}}
+          path: k8s/argocd/gcp/manifests/kustomize/strimzi-kafka/overlays/{{name}}
       destination:
         server: '{{server}}'
         namespace: strimzi-kafka
