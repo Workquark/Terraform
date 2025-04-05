@@ -6,6 +6,6 @@ resources:
   - ../../base
 
 patches:
-  - path: patch-acme-cluster-issuer.yaml
+  - path: patches/cluster-issuer.yaml
     target:
       kind: ClusterIssuer
