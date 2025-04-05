@@ -10,7 +10,7 @@ ingress:
     # cert-manager.io/cluster-issuer: production
   # ingressClassName: ""
   
-  pathType: ImplementationSpecific
+  pathType: Prefix
   path: "/"
   servicePort: 80
 
