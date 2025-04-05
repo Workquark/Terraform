@@ -91,7 +91,7 @@ jobs:
           gcloud components install gke-gcloud-auth-plugin
           gcloud container clusters get-credentials jrc-online-management-gke-cluster --region europe-west1
           kubectl get pods -A
-          kubectl create clusterrolebinding github --clusterrole cluster-admin --user github@${{ secrets.project }}.iam.gserviceaccount.com
+          # kubectl create clusterrolebinding github --clusterrole cluster-admin --user github@${{ secrets.project }}.iam.gserviceaccount.com # Set this manually
 
       - name: Install Task
         uses: arduino/setup-task@v2
