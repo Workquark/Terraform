@@ -8,6 +8,7 @@ extraArgs:
 - --ignore-ingress-tls-spec
 
 serviceAccount:
+  name: external-dns
   annotations:
     iam.gke.io/gcp-service-account: external-dns@concise-mesh-453415-t8.iam.gserviceaccount.com
 
