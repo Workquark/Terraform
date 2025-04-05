@@ -9,7 +9,7 @@ spec:
     - repoURL: https://github.com/Workquark/Terraform.git
       ref: argo
     - repoURL: https://releases.rancher.com/server-charts/latest
-      chart: cattle-system
+      chart: rancher
       targetRevision: 2.10.3
       helm:
         valueFiles:
