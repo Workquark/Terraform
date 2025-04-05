@@ -39,7 +39,7 @@ server:
       cert-manager.io/cluster-issuer: production
       # networking.gke.io/managed-certificates: argocd-managed-cert
       # kubernetes.io/ingress.class: "gce"
-    # extraTls:
-    #   - hosts:
-    #     - argocd.druidsoft.in
-    #     secretName: argocd-ssl-tls
+    extraTls:
+      - hosts:
+        - argocd.druidsoft.in
+        secretName: argocd-ssl-tls
