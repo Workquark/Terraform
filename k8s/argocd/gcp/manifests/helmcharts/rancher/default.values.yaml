@@ -1,0 +1,25 @@
+hostname: rancher.druidsoft.in
+
+ingress:
+  enabled: true
+  includeDefaultExtraAnnotations: true
+  extraAnnotations: 
+    kubernetes.io/ingress.allow-http: "false"
+    kubernetes.io/ingress.global-static-ip-name: global-static-ip
+    external-dns.alpha.kubernetes.io/hostname: rancher.druidsoft.in
+    cert-manager.io/cluster-issuer: production
+  # ingressClassName: ""
+  
+  pathType: ImplementationSpecific
+  path: "/"
+  servicePort: 80
+
+  tls:
+    # options: rancher, letsEncrypt, secret
+    source: letsEncrypt
+    secretName: tls-rancher-ingress
+
+service:
+  type: "NodePort"
+  annotations: 
+    cloud.google.com/neg: '{"exposed_ports": {"80":{"name": "rancher-service-neg"}}}'
