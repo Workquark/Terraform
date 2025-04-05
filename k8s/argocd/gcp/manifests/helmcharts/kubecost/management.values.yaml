@@ -13,7 +13,7 @@ ingress:
       external-dns.alpha.kubernetes.io/hostname: kubecost.druidsoft.in
       cert-manager.io/cluster-issuer: production
   paths: ["/"]  # There's no need to route specifically to the pods-- we have an nginx deployed that handles routing
-  pathType: ImplementationSpecific
+  pathType: Prefix
   hosts:
     - kubecost.druidsoft.in
   tls: 
