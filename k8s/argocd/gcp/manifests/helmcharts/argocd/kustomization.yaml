@@ -5,12 +5,3 @@ namespace: argocd
 
 resources:
   - managed-certificate.yaml
-
-helmCharts:
-  - name: argo-cd
-    releaseName: argocd
-    repo: https://argoproj.github.io/argo-helm
-    includeCRDs: true
-    version: v7.8.13
-    namespace: argocd
-    valuesFile: argocd.values.yaml
