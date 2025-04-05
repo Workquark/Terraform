@@ -17,8 +17,8 @@ nodeSelector:
   kubernetes.io/os: linux
   iam.gke.io/gke-metadata-server-enabled: "true"
 
-ingressClassFilters:
-- nginx
+# ingressClassFilters:
+# - nginx
 
 domainFilters:
 - druidsoft.in
