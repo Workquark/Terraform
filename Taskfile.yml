@@ -102,3 +102,10 @@ tasks:
       - helm repo add argo https://argoproj.github.io/argo-helm
       - helm repo update
       - helm upgrade -i --wait argocd argo/argo-cd --version 7.8.13 -n argocd --create-namespace -f ./k8s/argocd/gcp/manifests/helmcharts/argocd/argocd.values.yaml
+
+  undo_bootstrap:
+    aliases:
+      - uninstall
+    cmds:
+      - kustomize build k8s/argocd/gcp/bootstrap | kubectl delete -f -
+      - helm uninstall argocd -n argocd

@@ -138,7 +138,7 @@ module "twingate" {
 ##             GKE                     ##
 #########################################
 
-module "gke_dev" {
+module "management_gke" {
   source       = "../../modules/gke"
   cluster_name = "${local.name}-${local.environment}-gke-cluster"
 
