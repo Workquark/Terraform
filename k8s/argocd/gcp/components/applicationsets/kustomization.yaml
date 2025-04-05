@@ -13,4 +13,6 @@ resources:
 
   ## Secrets Management 
   - external-secrets.yaml
-  # - kafka.yaml
+
+  ## Messaging and Eventing
+  - kafka.yaml
