@@ -4,6 +4,4 @@ kind: Kustomization
 namespace: argocd
 
 resources:
-  - oci-secrets/
-  - argocd.yaml
-  - rancher.yaml
+  - strimzi-kafka
