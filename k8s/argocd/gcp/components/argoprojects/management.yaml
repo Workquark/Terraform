@@ -19,7 +19,9 @@ spec:
     - https://charts.external-secrets.io # external-secrets
     - https://releases.rancher.com/server-charts/latest # rancher
     - https://kubecost.github.io/cost-analyzer # kubecost
+    - https://kubernetes-sigs.github.io/descheduler # descheduler
     - quay.io/strimzi-helm/strimzi-kafka-operator # strimzi-kafka
+
   destinations:
     - namespace: "*"
       server: "https://kubernetes.default.svc"
