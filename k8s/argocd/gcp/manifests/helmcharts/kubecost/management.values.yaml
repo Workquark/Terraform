@@ -1,6 +1,7 @@
 global:
   zone: kubecost.druidsoft.in  # cluster.local
 
+kubecostToken: "d29ya3F1YXJrQGdtYWlsLmNvbQ==xm343yadf98"
 ingress:
   enabled: true
   # className: nginx
