@@ -15,4 +15,4 @@ resources:
   - external-secrets.yaml
 
   ## Messaging and Eventing
-  - kafka.yaml
+  - strimzi-kafka.yaml
