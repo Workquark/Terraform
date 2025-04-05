@@ -150,7 +150,7 @@ module "projects_iam_bindings" {
 
     "roles/iam.workloadIdentityUser" = [
       # "serviceAccount:github@${var.project_id}.iam.gserviceaccount.com",
-      "serviceAccount:${var.project_id}.svc.id.goog[external-dns-public/external-dns-public]",
+      "serviceAccount:${var.project_id}.svc.id.goog[external-dns/external-dns]",
       "serviceAccount:${var.project_id}.svc.id.goog[external-dns-private/external-dns-private]",
       "serviceAccount:${var.project_id}.svc.id.goog[external-secrets/external-secrets]",
       "serviceAccount:${var.project_id}.svc.id.goog[cert-manager/cert-manager]",
