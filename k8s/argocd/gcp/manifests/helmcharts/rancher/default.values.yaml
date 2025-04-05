@@ -5,7 +5,7 @@ ingress:
   includeDefaultExtraAnnotations: true
   extraAnnotations: 
     kubernetes.io/ingress.allow-http: "false"
-    kubernetes.io/ingress.global-static-ip-name: global-static-ip
+    # kubernetes.io/ingress.global-static-ip-name: global-static-ip
     external-dns.alpha.kubernetes.io/hostname: rancher.druidsoft.in
     # cert-manager.io/cluster-issuer: production
   # ingressClassName: ""
