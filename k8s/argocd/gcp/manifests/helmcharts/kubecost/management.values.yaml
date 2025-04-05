@@ -9,7 +9,7 @@ ingress:
     # kubernetes.io/tls-acme: "true"
   annotations:
       kubernetes.io/ingress.allow-http: "false"
-      kubernetes.io/ingress.global-static-ip-name: global-static-ip
+      # kubernetes.io/ingress.global-static-ip-name: global-static-ip
       external-dns.alpha.kubernetes.io/hostname: kubecost.druidsoft.in
       cert-manager.io/cluster-issuer: production
   paths: ["/"]  # There's no need to route specifically to the pods-- we have an nginx deployed that handles routing
