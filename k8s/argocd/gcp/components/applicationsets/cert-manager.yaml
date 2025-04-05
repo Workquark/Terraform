@@ -33,6 +33,9 @@ spec:
           helm:
             valueFiles:
             - $argo/k8s/argocd/gcp/manifests/helmcharts/cert-manager/{{name}}.values.yaml
+        - repoURL: https://github.com/Workquark/Terraform.git
+          targetRevision: main
+          path: k8s/argocd/gcp/manifests/helmcharts/cert-manager/overlays/base
       destination:
         server: '{{server}}'
         namespace: cert-manager
