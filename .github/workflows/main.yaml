@@ -2,6 +2,8 @@ name: MAIN
 
 on: 
   push:
+    paths:
+      - Terraform/**
     branches:
       - main
 
