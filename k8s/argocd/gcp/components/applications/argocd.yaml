@@ -13,9 +13,9 @@ spec:
       helm:
         valueFiles:
         - $argo/k8s/argocd/gcp/manifests/helmcharts/argocd/argocd.values.yaml
-    - repoURL: https://github.com/Workquark/Terraform.git
-      targetRevision: main
-      path: k8s/argocd/gcp/manifests/helmcharts/argocd
+    # - repoURL: https://github.com/Workquark/Terraform.git
+    #   targetRevision: main
+    #   path: k8s/argocd/gcp/manifests/helmcharts/argocd
   destination:
     server: "https://kubernetes.default.svc"
     namespace: argocd
