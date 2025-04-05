@@ -1,5 +1,5 @@
 output "cluster_endpoint" {
-  value = module.gke_dev.cluster_endpoint
+  value = module.management_gke.cluster_endpoint
 }
 
 output "global_static_ip" {
