@@ -19,3 +19,6 @@ resources:
 
   ## FinOps
   - kubecost.yaml
+
+  ## Descheduler
+  - descheduler.yaml
