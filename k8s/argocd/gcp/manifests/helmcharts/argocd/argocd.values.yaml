@@ -35,6 +35,7 @@ server:
       nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
       nginx.ingress.kubernetes.io/backend-protocol: "HTTP"
       kubernetes.io/ingress.global-static-ip-name: "global-static-ip"
+      external-dns.alpha.kubernetes.io/hostname: "argocd.druidsoft.in"
       # kubernetes.io/ingress.class: "gce"
     # extraTls:
     #   - hosts:
