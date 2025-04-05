@@ -64,7 +64,7 @@ terraform {
 }
 
 data "google_client_config" "default" {
-  depends_on = [module.gke_dev]
+  depends_on = [module.management_gke]
 }
 
 provider "github" {
