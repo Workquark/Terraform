@@ -4,6 +4,7 @@ global:
     namespace: "cert-manager"
 
 serviceAccount:
+  name: cert-manager
   annotations:
     iam.gke.io/gcp-service-account: cert-manager@concise-mesh-453415-t8.iam.gserviceaccount.com
 
