@@ -18,7 +18,7 @@ spec:
     - https://github.com/Workquark/Terraform.git # app manifest repo
     - https://charts.external-secrets.io # external-secrets
     - https://releases.rancher.com/server-charts/latest # rancher
-    - quay.io/strimzi-helm/strimzi-kafka-operator # strimzi-kafka
+    - oci://quay.io/strimzi-helm/strimzi-kafka-operator # strimzi-kafka
   destinations:
     - namespace: "*"
       server: "https://kubernetes.default.svc"
