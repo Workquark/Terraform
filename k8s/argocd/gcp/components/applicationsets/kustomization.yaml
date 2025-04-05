@@ -16,3 +16,6 @@ resources:
 
   ## Messaging and Eventing
   - strimzi-kafka.yaml
+
+  ## FinOps
+  - kubecost.yaml
