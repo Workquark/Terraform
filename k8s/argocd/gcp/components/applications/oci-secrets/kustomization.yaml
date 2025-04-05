@@ -4,4 +4,4 @@ kind: Kustomization
 namespace: argocd
 
 resources:
-  - strimzi-kafka
+  - strimzi-kafka-oci.yaml
