@@ -27,7 +27,7 @@ spec:
       sources:
         - repoURL: https://github.com/Workquark/Terraform.git
           ref: argo
-        - repoURL: https://kubecost.github.io/cost-analyzer/
+        - repoURL: https://kubecost.github.io/cost-analyzer
           chart: cost-analyzer
           targetRevision: 2.7.0
           helm:
